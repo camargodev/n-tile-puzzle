@@ -10,6 +10,7 @@ class StateManager {
 public:
 
     const short BLANK = 0;
+    const uint64_t ALL_ONES = ~0;
     int getNumberOfTiles();
     void printPackedState(PackedState state);
     void printUnpackedState(UnpackedState state);
@@ -18,12 +19,12 @@ public:
     UnpackedState getUnpackedState(PackedState state);
     std::vector<PackedState> produceNextStates(PackedState state);
     int getBlankTilePosition(PackedState state);
-    vector<int> getNeighborsPosition(int blankPosition);
-    
+    vector<int> getNeighborsPositions(int blankPosition);
+    PackedState swapValuesByPositions(PackedState state, int pos1, int pos2);
+
 private:
 
     const PackedState INITIAL_MASK = 15;
-    PackedState swapByIndexes(PackedState state, Position pos1, Position pos2);
     int numberOfTiles;
 
 };

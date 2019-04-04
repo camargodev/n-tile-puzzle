@@ -17,7 +17,6 @@ using namespace std;
 }
 
 void StateManager :: printUnpackedState(UnpackedState uState) {
-      cout << "\nUnpackedState = ";
       for(int i = 0; i < numberOfTiles; i++) {
         cout << "\n";
             for(int j = 0; j < numberOfTiles; j++) {
@@ -27,11 +26,8 @@ void StateManager :: printUnpackedState(UnpackedState uState) {
 }
 
   bool StateManager :: isGoalState(PackedState state) {
-    // for (int i = 0; i < NUMBER_OF_TILES; i++) 
-    //     for (int j = 0; j < NUMBER_OF_TILES; j++)
-    //         if (state[i][j] != 3*i+j) 
-    //             return false;
-    return true;          
+      PackedState goal = numberOfTiles == 3 ? GOAL_3x3 : GOAL_4x4;
+      return state == goal;
   }
 
   PackedState StateManager :: getPackedState(UnpackedState state) {
@@ -63,34 +59,14 @@ UnpackedState StateManager :: getUnpackedState(PackedState state) {
 }
 
   vector<PackedState> StateManager :: produceNextStates(PackedState state) {
-        vector<PackedState> states;
-        // Position blankTilePosition = getBlankTilePosition(state);
-        // Position tileToSwapPosition;
-        // if (blankTilePosition.y > 0) {
-        //     tileToSwapPosition.x = blankTilePosition.x;
-        //     tileToSwapPosition.y = blankTilePosition.y - 1;
-        //     State3x3 newState = swapByIndexes(state, blankTilePosition, tileToSwapPosition);
-        //     states.insert(states.end(), newState);
-        // }
-        // if (blankTilePosition.x > 0) {
-        //     tileToSwapPosition.x = blankTilePosition.x - 1;
-        //     tileToSwapPosition.y = blankTilePosition.y;
-        //     State3x3 newState = swapByIndexes(state, blankTilePosition, tileToSwapPosition);
-        //     states.insert(states.end(), newState);
-        // }
-        // if (blankTilePosition.y < NUMBER_OF_TILES-1) {
-        //     tileToSwapPosition.x = blankTilePosition.x;
-        //     tileToSwapPosition.y = blankTilePosition.y + 1;
-        //     State3x3 newState = swapByIndexes(state, blankTilePosition, tileToSwapPosition);
-        //     states.insert(states.end(), newState);
-        // }
-        // if (blankTilePosition.x < NUMBER_OF_TILES-1) {
-        //     tileToSwapPosition.x = blankTilePosition.x + 1;
-        //     tileToSwapPosition.y = blankTilePosition.y;
-        //     State3x3 newState = swapByIndexes(state, blankTilePosition, tileToSwapPosition);
-        //     states.insert(states.end(), newState);
-        // }
-        // return states;
+        vector<PackedState> neighbors;
+        int blankPosition = getBlankTilePosition(state);
+        vector<int> neighborsPositions = getNeighborsPositions(blankPosition);
+        for (auto neighboorPosition : neighborsPositions) {
+            PackedState neighbor = swapValuesByPositions(state, blankPosition, neighboorPosition);
+            neighbors.insert(neighbors.begin(), neighbor);
+        }
+        return neighbors;
     }
 
     int StateManager :: getBlankTilePosition(PackedState state) {
@@ -106,15 +82,34 @@ UnpackedState StateManager :: getUnpackedState(PackedState state) {
         }
     }
 
-    
-    vector<int> StateManager :: getNeighborsPosition(int blankPosition) {
-
+    vector<int> StateManager :: getNeighborsPositions(int blankPosition) {
+        vector<int> neighbors;
+        if (blankPosition > numberOfTiles-1)
+            neighbors.insert(neighbors.begin(), blankPosition-numberOfTiles);
+        if (blankPosition < numberOfTiles*(numberOfTiles-1))
+            neighbors.insert(neighbors.begin(), blankPosition+numberOfTiles);
+        if ((blankPosition+1) % numberOfTiles != 0)
+            neighbors.insert(neighbors.begin(), blankPosition+1);
+        if (blankPosition % numberOfTiles != 0)
+            neighbors.insert(neighbors.begin(), blankPosition-1);
+        return neighbors;
     }
 
-    PackedState StateManager :: swapByIndexes(PackedState state, Position pos1, Position pos2) {
-        PackedState newState = state;
-        // int firstValue = newState[pos1.x][pos1.y];
-        // newState[pos1.x][pos1.y] = newState[pos2.x][pos2.y];
-        // newState[pos2.x][pos2.y] = firstValue;
-        // return newState;
+    PackedState StateManager :: swapValuesByPositions(PackedState state, int blankPosition, int neighborPosition) {
+       
+        uint64_t maskToGetNeighborValue = INITIAL_MASK;
+        maskToGetNeighborValue = maskToGetNeighborValue << 4*neighborPosition;
+        uint64_t neighborValue = state & maskToGetNeighborValue;
+        
+        // cleans neighbor position
+        uint64_t maskToCleanNeighborPosition = ~maskToGetNeighborValue;
+        uint64_t stateWithBlankNeighbor = state & maskToCleanNeighborPosition;
+        
+        // moves neighbor value to blank position
+        if (neighborPosition < blankPosition)
+            neighborValue = neighborValue << 4*(blankPosition-neighborPosition);
+        else
+            neighborValue = neighborValue >> 4*(neighborPosition-blankPosition);
+
+        return stateWithBlankNeighbor | neighborValue;
     }
