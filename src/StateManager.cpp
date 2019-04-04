@@ -10,23 +10,28 @@ using namespace std;
   vector<State3x3> StateManager :: produceNextStates(State3x3 state) {;
         vector<State3x3> states;
         Position blankTilePosition = getBlankTilePosition(state);
-        if (blankTilePosition.getY() > 0) {
-            Position tileToSwapPosition(blankTilePosition.getX()-1, blankTilePosition.getY());
+        Position tileToSwapPosition;
+        if (blankTilePosition.y > 0) {
+            tileToSwapPosition.x = blankTilePosition.x - 1;
+            tileToSwapPosition.y = blankTilePosition.y;
             State3x3 newState = swapByIndexes(state, blankTilePosition, tileToSwapPosition);
             states.insert(states.end(), newState);
         }
-        if (blankTilePosition.getX() > 0) {
-            Position tileToSwapPosition(blankTilePosition.getX(), blankTilePosition.getY()-1);
+        if (blankTilePosition.x > 0) {
+            tileToSwapPosition.x = blankTilePosition.x;
+            tileToSwapPosition.y = blankTilePosition.y - 1;
             State3x3 newState = swapByIndexes(state, blankTilePosition, tileToSwapPosition);
             states.insert(states.end(), newState);
         }
-        if (blankTilePosition.getY() < NUMBER_OF_TILES-1) {
-            Position tileToSwapPosition(blankTilePosition.getX()+1, blankTilePosition.getY());
+        if (blankTilePosition.y < NUMBER_OF_TILES-1) {
+            tileToSwapPosition.x = blankTilePosition.x + 1;
+            tileToSwapPosition.y = blankTilePosition.y;
             State3x3 newState = swapByIndexes(state, blankTilePosition, tileToSwapPosition);
             states.insert(states.end(), newState);
         }
-        if (blankTilePosition.getX() < NUMBER_OF_TILES-1) {
-            Position tileToSwapPosition(blankTilePosition.getX(), blankTilePosition.getY()+1);
+        if (blankTilePosition.x < NUMBER_OF_TILES-1) {
+            tileToSwapPosition.x = blankTilePosition.x;
+            tileToSwapPosition.y = blankTilePosition.y + 1;
             State3x3 newState = swapByIndexes(state, blankTilePosition, tileToSwapPosition);
             states.insert(states.end(), newState);
         }
@@ -34,16 +39,20 @@ using namespace std;
     }
 
     Position StateManager :: getBlankTilePosition(State3x3 state) {
+        Position blankTilePosition;
         for (int i = 0; i < NUMBER_OF_TILES; i++) 
             for (int j = 0; j < NUMBER_OF_TILES; j++) 
-                if (state[i][j] == BLANK)
-                    return Position(i, j);
+                if (state[i][j] == BLANK) {
+                    blankTilePosition.x = i;
+                    blankTilePosition.y = j;
+                }
+        return blankTilePosition;
     }
 
     State3x3 StateManager :: swapByIndexes(State3x3 state, Position pos1, Position pos2) {
         State3x3 newState = state;
-        int firstValue = newState[pos1.getX()][pos1.getY()];
-        newState[pos1.getX()][pos1.getY()] = newState[pos2.getX()][pos2.getY()];
-        newState[pos2.getX()][pos2.getY()] = firstValue;
+        int firstValue = newState[pos1.x][pos1.y];
+        newState[pos1.x][pos1.y] = newState[pos2.x][pos2.y];
+        newState[pos2.x][pos2.y] = firstValue;
         return newState;
     }
