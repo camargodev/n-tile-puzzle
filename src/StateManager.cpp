@@ -7,31 +7,39 @@
  
 using namespace std;
 
+  bool StateManager :: isObjectiveState(State3x3 state) {
+    for (int i = 0; i < NUMBER_OF_TILES; i++) 
+        for (int j = 0; j < NUMBER_OF_TILES; j++)
+            if (state[i][j] != 3*i+j) 
+                return false;
+    return true;          
+  }
+
   vector<State3x3> StateManager :: produceNextStates(State3x3 state) {;
         vector<State3x3> states;
         Position blankTilePosition = getBlankTilePosition(state);
         Position tileToSwapPosition;
         if (blankTilePosition.y > 0) {
-            tileToSwapPosition.x = blankTilePosition.x - 1;
-            tileToSwapPosition.y = blankTilePosition.y;
-            State3x3 newState = swapByIndexes(state, blankTilePosition, tileToSwapPosition);
-            states.insert(states.end(), newState);
-        }
-        if (blankTilePosition.x > 0) {
             tileToSwapPosition.x = blankTilePosition.x;
             tileToSwapPosition.y = blankTilePosition.y - 1;
             State3x3 newState = swapByIndexes(state, blankTilePosition, tileToSwapPosition);
             states.insert(states.end(), newState);
         }
-        if (blankTilePosition.y < NUMBER_OF_TILES-1) {
-            tileToSwapPosition.x = blankTilePosition.x + 1;
+        if (blankTilePosition.x > 0) {
+            tileToSwapPosition.x = blankTilePosition.x - 1;
             tileToSwapPosition.y = blankTilePosition.y;
             State3x3 newState = swapByIndexes(state, blankTilePosition, tileToSwapPosition);
             states.insert(states.end(), newState);
         }
-        if (blankTilePosition.x < NUMBER_OF_TILES-1) {
+        if (blankTilePosition.y < NUMBER_OF_TILES-1) {
             tileToSwapPosition.x = blankTilePosition.x;
             tileToSwapPosition.y = blankTilePosition.y + 1;
+            State3x3 newState = swapByIndexes(state, blankTilePosition, tileToSwapPosition);
+            states.insert(states.end(), newState);
+        }
+        if (blankTilePosition.x < NUMBER_OF_TILES-1) {
+            tileToSwapPosition.x = blankTilePosition.x + 1;
+            tileToSwapPosition.y = blankTilePosition.y;
             State3x3 newState = swapByIndexes(state, blankTilePosition, tileToSwapPosition);
             states.insert(states.end(), newState);
         }

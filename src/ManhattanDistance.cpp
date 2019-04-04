@@ -11,9 +11,11 @@ int ManhattanDistance :: calculate(State3x3 state) {
     int distance = 0;
     for (int i = 0; i < NUMBER_OF_TILES; i++) {
         for (int j = 0; j < NUMBER_OF_TILES; j++) {
-            Position expectedPosition = getExpectedPositionForNumber(state[i][j]);
-            distance += abs(i - expectedPosition.x);
-            distance += abs(j - expectedPosition.y);
+            if (state[i][j] != 0) {
+                Position expectedPosition = getExpectedPositionForNumber(state[i][j]);
+                distance += abs(i - expectedPosition.x);
+                distance += abs(j - expectedPosition.y);
+            }
         }
     }
     return distance;

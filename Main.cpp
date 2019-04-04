@@ -1,8 +1,6 @@
 #include<iostream>
-#include<math.h>  
 #include <stdlib.h> 
 #include <vector>
-#include <array>
 #include "headers/Position.h"
 #include "headers/ManhattanDistance.h"
 #include "headers/StateManager.h"
@@ -24,7 +22,7 @@ int main()
     ManhattanDistance manhattanDistance;
     StateManager stateManager;
     
-    State3x3 initialState = {{{4, 1, 2}, {3, 0, 5}, {6, 7, 8}}};
+    State3x3 initialState = {{{3,0,8}, {7,5,2}, {1,6,4}}};
     cout << "Initial state is:\n";
     printState3x3(initialState);
     int distance = manhattanDistance.calculate(initialState);
@@ -36,6 +34,7 @@ int main()
         printState3x3(state);
         distance = manhattanDistance.calculate(state);
         cout << "Manhattan distance to S* is " << distance << "\n";
+        cout << "Is objective: " << stateManager.isObjectiveState(state) << "\n";
     }
 
     return 0;

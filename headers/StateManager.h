@@ -11,6 +11,7 @@ public:
 
     const short BLANK = 0;
     std::vector<State3x3> produceNextStates(State3x3 state);
+    bool isObjectiveState(State3x3 state);
 
 private:
 
