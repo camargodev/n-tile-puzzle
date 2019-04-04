@@ -17,10 +17,12 @@ public:
     PackedState getPackedState(UnpackedState state);
     UnpackedState getUnpackedState(PackedState state);
     std::vector<PackedState> produceNextStates(PackedState state);
+    int getBlankTilePosition(PackedState state);
+    vector<int> getNeighborsPosition(int blankPosition);
     
 private:
 
-    Position getBlankTilePosition(PackedState state);
+    const PackedState INITIAL_MASK = 15;
     PackedState swapByIndexes(PackedState state, Position pos1, Position pos2);
     int numberOfTiles;
 

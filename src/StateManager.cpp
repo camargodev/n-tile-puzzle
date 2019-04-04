@@ -47,7 +47,7 @@ void StateManager :: printUnpackedState(UnpackedState uState) {
 }
 
 UnpackedState StateManager :: getUnpackedState(PackedState state) {
-    PackedState mask = 15;
+    PackedState mask = INITIAL_MASK;
     UnpackedState unpackedState;
     for (int i = 0; i < numberOfTiles; i++) {
         Line line;
@@ -93,15 +93,22 @@ UnpackedState StateManager :: getUnpackedState(PackedState state) {
         // return states;
     }
 
-    Position StateManager :: getBlankTilePosition(PackedState state) {
+    int StateManager :: getBlankTilePosition(PackedState state) {
         Position blankTilePosition;
-        // for (int i = 0; i < NUMBER_OF_TILES; i++) 
-        //     for (int j = 0; j < NUMBER_OF_TILES; j++) 
-        //         if (state[i][j] == BLANK) {
-        //             blankTilePosition.x = i;
-        //             blankTilePosition.y = j;
-        //         }
-        return blankTilePosition;
+        PackedState mask = INITIAL_MASK;
+
+        for (int i = 0; i < numberOfTiles*numberOfTiles; i++) {
+            uint64_t value = state & mask;
+            short shortValue = value >> 4*i;
+            if (shortValue == BLANK)
+                return i;
+            mask = mask << 4;
+        }
+    }
+
+    
+    vector<int> StateManager :: getNeighborsPosition(int blankPosition) {
+
     }
 
     PackedState StateManager :: swapByIndexes(PackedState state, Position pos1, Position pos2) {

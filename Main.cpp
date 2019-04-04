@@ -34,11 +34,13 @@ int main()
     // }
 
     cout << "\n\n3x3:";
-    UnpackedState state3x3 = {{0, 3, 4}, {5, 1, 8}, {2, 7, 6}};
+    UnpackedState state3x3 = {{3, 0, 4}, {5, 1, 8}, {2, 7, 6}};
     PackedState packed3x3 = stateManager.getPackedState(state3x3);
     stateManager.printPackedState(packed3x3);
     UnpackedState unpacked3x3 = stateManager.getUnpackedState(packed3x3);
     stateManager.printUnpackedState(unpacked3x3);
+    int blankPosition = stateManager.getBlankTilePosition(packed3x3);
+    cout << "\nPosition of blank = " << blankPosition;
     
     cout << "\n\n4x4:";
     UnpackedState state4x4 = {{12, 0, 3, 4}, {9, 5, 1, 8}, {15, 2, 7, 6}, {11, 10, 14, 13}};
@@ -46,6 +48,8 @@ int main()
     stateManager.printPackedState(packed4x4);
     UnpackedState unpacked4x4 = stateManager.getUnpackedState(packed4x4);
     stateManager.printUnpackedState(unpacked4x4);
+    blankPosition = stateManager.getBlankTilePosition(packed4x4);
+    cout << "\nPosition of blank = " << blankPosition;
 
     return 0;
 }
