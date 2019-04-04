@@ -1,2 +1,2 @@
-all: Main.cpp Position.cpp ManhattanDistance.cpp StateManager.cpp
-	g++ -o main Main.cpp Position.cpp ManhattanDistance.cpp StateManager.cpp
+all: Main.cpp src/Position.cpp src/ManhattanDistance.cpp src/StateManager.cpp
+	g++ -o main Main.cpp src/Position.cpp src/ManhattanDistance.cpp src/StateManager.cpp

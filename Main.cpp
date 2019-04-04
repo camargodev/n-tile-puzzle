@@ -3,9 +3,9 @@
 #include <stdlib.h> 
 #include <vector>
 #include <array>
-#include "Position.h"
-#include "ManhattanDistance.h"
-#include "StateManager.h"
+#include "headers/Position.h"
+#include "headers/ManhattanDistance.h"
+#include "headers/StateManager.h"
  
 using namespace std;
 
