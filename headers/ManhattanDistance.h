@@ -8,9 +8,11 @@ class ManhattanDistance {
 
 private:
     Position getExpectedPositionForNumber(int number);
+    int numberOfTiles;
 
 public:
-    int calculate(State3x3 state);
+    ManhattanDistance(short numberOfTiles);
+    int calculate(PackedState state);
 
 };
 
