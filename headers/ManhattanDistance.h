@@ -2,18 +2,17 @@
 #define MANHATTAN_H
 
 #include "State.h"
-#include "Position.h"
 
 class ManhattanDistance {
 
 private:
     int numberOfTiles;
+    int getExpectedPositionForNumber(int number);
+    int calculateDistanceBeetwenPositions(int pos1, int pos2);
 
 public:
-    int getExpectedPositionForNumber(int number);
     ManhattanDistance(short numberOfTiles);
     int calculate(PackedState state);
-    int calculateDistanceBeetwenPositions(int pos1, int pos2);
 };
 
 #endif

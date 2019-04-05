@@ -30,7 +30,7 @@ void StateManager :: printUnpackedState(UnpackedState uState) {
       return state == goal;
   }
 
-  PackedState StateManager :: getPackedState(UnpackedState state) {
+  PackedState StateManager :: pack(UnpackedState state) {
     PackedState packedState = 0;
     this->numberOfTiles = state.size();
     for(int i = 0; i < numberOfTiles; i++) {
@@ -42,7 +42,7 @@ void StateManager :: printUnpackedState(UnpackedState uState) {
     return packedState;
 }
 
-UnpackedState StateManager :: getUnpackedState(PackedState state) {
+UnpackedState StateManager :: unpack(PackedState state) {
     PackedState mask = INITIAL_MASK;
     UnpackedState unpackedState;
     for (int i = 0; i < numberOfTiles; i++) {
@@ -70,8 +70,7 @@ UnpackedState StateManager :: getUnpackedState(PackedState state) {
     }
 
     int StateManager :: getBlankTilePosition(PackedState state) {
-        Position blankTilePosition;
-        PackedState mask = INITIAL_MASK;
+       PackedState mask = INITIAL_MASK;
 
         for (int i = 0; i < numberOfTiles*numberOfTiles; i++) {
             uint64_t value = state & mask;
