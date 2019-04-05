@@ -1,11 +1,15 @@
 #ifndef STATE_H
 #define STATE_H
 
-#include <array>
+#include <vector>
 
-const short NUMBER_OF_TILES = 3;
+using namespace std;
 
-using State3x3 = std::array<std::array<int, 3>, 3>;
+using Line = vector<short>;
+using UnpackedState = vector<Line>;
+using PackedState = uint64_t;
 
+const PackedState GOAL_3x3 = 305419896;
+const PackedState GOAL_4x4 = 81985529216486895;
 
 #endif
