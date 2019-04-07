@@ -21,6 +21,7 @@ void Result :: setOptimalSolutionLenght(int length) {
 
 void Result :: setInitialHeuristicValue(int hValue) {
     this->initialHeuristicValue = hValue;
+    this->totalHValue += hValue;
 }
 
 void Result :: increaseTotalHeuristicValue(int hValue) {

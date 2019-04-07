@@ -24,7 +24,6 @@ Result bfs(PackedState initialState) {
 
     int initialStateHeuristicValue = heuristic.calculate(initialState);
     result.setInitialHeuristicValue(initialStateHeuristicValue);
-    result.increaseTotalHeuristicValue(initialStateHeuristicValue);
     open.push_back(Node(initialState, 0));
     closed.insert(closed.begin(), initialState);
 
@@ -47,6 +46,9 @@ Result bfs(PackedState initialState) {
         }
     }
     return result;
+}
+
+Result astart(PackedState initialState) {
 
 }
 
