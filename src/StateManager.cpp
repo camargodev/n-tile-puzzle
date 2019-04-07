@@ -8,12 +8,16 @@
  
 using namespace std;
 
-  int StateManager :: getNumberOfTiles() {
-      return this->numberOfTiles;
-  }
+StateManager :: StateManager(int numberOfTiles) {
+    this->numberOfTiles = numberOfTiles;
+}
 
-  void StateManager :: printPackedState(PackedState pState) {
-      cout << "\nPackedState = " << bitset<64>(pState);
+int StateManager :: getNumberOfTiles() {
+    return this->numberOfTiles;
+}
+
+void StateManager :: printPackedState(PackedState pState) {
+    cout << "\nPackedState = " << bitset<64>(pState);
 }
 
 void StateManager :: printUnpackedState(UnpackedState uState) {
@@ -25,12 +29,12 @@ void StateManager :: printUnpackedState(UnpackedState uState) {
         }     
 }
 
-  bool StateManager :: isGoalState(PackedState state) {
-      PackedState goal = numberOfTiles == 3 ? GOAL_3x3 : GOAL_4x4;
-      return state == goal;
-  }
+bool StateManager :: isGoalState(PackedState state) {
+    PackedState goal = numberOfTiles == 3 ? GOAL_3x3 : GOAL_4x4;
+    return state == goal;
+}
 
-  PackedState StateManager :: pack(UnpackedState state) {
+PackedState StateManager :: pack(UnpackedState state) {
     PackedState packedState = 0;
     this->numberOfTiles = state.size();
     for(int i = 0; i < numberOfTiles; i++) {
@@ -58,57 +62,57 @@ UnpackedState StateManager :: unpack(PackedState state) {
     return unpackedState;
 }
 
-  vector<PackedState> StateManager :: produceNextStates(PackedState state) {
-        vector<PackedState> neighbors;
-        int blankPosition = getBlankTilePosition(state);
-        vector<int> neighborsPositions = getNeighborsPositions(blankPosition);
-        for (auto neighboorPosition : neighborsPositions) {
-            PackedState neighbor = swapValuesByPositions(state, blankPosition, neighboorPosition);
-            neighbors.insert(neighbors.begin(), neighbor);
-        }
-        return neighbors;
+vector<PackedState> StateManager :: produceNextStates(PackedState state) {
+    vector<PackedState> neighbors;
+    int blankPosition = getBlankTilePosition(state);
+    vector<int> neighborsPositions = getNeighborsPositions(blankPosition);
+    for (auto neighboorPosition : neighborsPositions) {
+        PackedState neighbor = swapValuesByPositions(state, blankPosition, neighboorPosition);
+        neighbors.insert(neighbors.begin(), neighbor);
     }
+    return neighbors;
+}
 
-    int StateManager :: getBlankTilePosition(PackedState state) {
-       PackedState mask = INITIAL_MASK;
+int StateManager :: getBlankTilePosition(PackedState state) {
+    PackedState mask = INITIAL_MASK;
 
-        for (int i = 0; i < numberOfTiles*numberOfTiles; i++) {
-            uint64_t value = state & mask;
-            short shortValue = value >> 4*i;
-            if (shortValue == BLANK)
-                return i;
-            mask = mask << 4;
-        }
+    for (int i = 0; i < numberOfTiles*numberOfTiles; i++) {
+        uint64_t value = state & mask;
+        short shortValue = value >> 4*i;
+        if (shortValue == BLANK)
+            return i;
+        mask = mask << 4;
     }
+}
 
-    vector<int> StateManager :: getNeighborsPositions(int blankPosition) {
-        vector<int> neighbors;
-        if (blankPosition < numberOfTiles*(numberOfTiles-1))
-            neighbors.insert(neighbors.begin(), blankPosition+numberOfTiles);
-        if ((blankPosition+1) % numberOfTiles != 0)
-            neighbors.insert(neighbors.begin(), blankPosition+1);
-        if (blankPosition % numberOfTiles != 0)
-            neighbors.insert(neighbors.begin(), blankPosition-1);
-        if (blankPosition > numberOfTiles-1)
-            neighbors.insert(neighbors.begin(), blankPosition-numberOfTiles);
-        return neighbors;
-    }
+vector<int> StateManager :: getNeighborsPositions(int blankPosition) {
+    vector<int> neighbors;
+    if (blankPosition < numberOfTiles*(numberOfTiles-1))
+        neighbors.insert(neighbors.begin(), blankPosition+numberOfTiles);
+    if ((blankPosition+1) % numberOfTiles != 0)
+        neighbors.insert(neighbors.begin(), blankPosition+1);
+    if (blankPosition % numberOfTiles != 0)
+        neighbors.insert(neighbors.begin(), blankPosition-1);
+    if (blankPosition > numberOfTiles-1)
+        neighbors.insert(neighbors.begin(), blankPosition-numberOfTiles);
+    return neighbors;
+}
 
-    PackedState StateManager :: swapValuesByPositions(PackedState state, int blankPosition, int neighborPosition) {
-       
-        uint64_t maskToGetNeighborValue = INITIAL_MASK;
-        maskToGetNeighborValue = maskToGetNeighborValue << 4*neighborPosition;
-        uint64_t neighborValue = state & maskToGetNeighborValue;
-        
-        // cleans neighbor position
-        uint64_t maskToCleanNeighborPosition = ~maskToGetNeighborValue;
-        uint64_t stateWithBlankNeighbor = state & maskToCleanNeighborPosition;
-        
-        // moves neighbor value to blank position
-        if (neighborPosition < blankPosition)
-            neighborValue = neighborValue << 4*(blankPosition-neighborPosition);
-        else
-            neighborValue = neighborValue >> 4*(neighborPosition-blankPosition);
+PackedState StateManager :: swapValuesByPositions(PackedState state, int blankPosition, int neighborPosition) {
+    
+    uint64_t maskToGetNeighborValue = INITIAL_MASK;
+    maskToGetNeighborValue = maskToGetNeighborValue << 4*neighborPosition;
+    uint64_t neighborValue = state & maskToGetNeighborValue;
+    
+    // cleans neighbor position
+    uint64_t maskToCleanNeighborPosition = ~maskToGetNeighborValue;
+    uint64_t stateWithBlankNeighbor = state & maskToCleanNeighborPosition;
+    
+    // moves neighbor value to blank position
+    if (neighborPosition < blankPosition)
+        neighborValue = neighborValue << 4*(blankPosition-neighborPosition);
+    else
+        neighborValue = neighborValue >> 4*(neighborPosition-blankPosition);
 
-        return stateWithBlankNeighbor | neighborValue;
-    }
+    return stateWithBlankNeighbor | neighborValue;
+}

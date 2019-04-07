@@ -29,9 +29,10 @@ void Result :: increaseTotalHeuristicValue(int hValue) {
 }
 
 void Result :: printResult() {
+    float avghValue = (float) this->totalHValue/max(this->expandedNodes, 1);
     cout << "\nNumber of expanded nodes: " << this->expandedNodes;
     cout << "\nLength of otimal solution: " << this->optimalSolutionLenght;
     cout << "\nDuration: " << this->duration;
     cout << "\nInitial state heuristic value: " << this->initialHeuristicValue;
-    cout << "\nAverage heuristic value: " << (float) this->totalHValue/this->expandedNodes;
+    cout << "\nAverage heuristic value: " << avghValue;
 }

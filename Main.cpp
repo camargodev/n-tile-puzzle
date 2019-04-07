@@ -2,61 +2,27 @@
 #include <stdlib.h> 
 #include <vector>
 #include <deque>
+#include <unordered_set>
 #include <algorithm>
 #include "headers/ManhattanDistance.h"
 #include "headers/StateManager.h"
 #include "headers/Node.h"
 #include "headers/Result.h"
+#include "headers/BFS.h"
  
 using namespace std;
-using ClosedSet = vector<PackedState>;
-using OpenSet = deque<Node>;
-
-StateManager stateManager;
-
-Result bfs(PackedState initialState) {    
-    Result result;
-    OpenSet open;
-    ClosedSet closed;
-    ManhattanDistance heuristic(stateManager.getNumberOfTiles());
-
-    result.startCountingTime();
-
-    int initialStateHeuristicValue = heuristic.calculate(initialState);
-    result.setInitialHeuristicValue(initialStateHeuristicValue);
-    open.push_back(Node(initialState, 0));
-    closed.insert(closed.begin(), initialState);
-
-    while (!open.empty()) {
-        Node currentNode = open.front();
-        open.pop_front();
-        result.increaseExpandedNodes();
-        result.increaseTotalHeuristicValue(heuristic.calculate(currentNode.getState()));
-        for (auto successorState : stateManager.produceNextStates(currentNode.getState())) {
-            Node successorNode = Node(successorState, currentNode.getCost() + 1);
-            if (stateManager.isGoalState(successorState)) {
-                result.setOptimalSolutionLenght(successorNode.getCost());
-                result.stopCountingTime();
-                return result;
-            }
-            if (find(closed.begin(), closed.end(), successorState) == closed.end()) {
-                closed.insert(closed.begin(), successorState);
-                open.push_back(successorNode);
-            }
-        }
-    }
-    return result;
-}
-
-Result astart(PackedState initialState) {
-
-}
 
 int main()
 {   
-    PackedState initialState = stateManager.pack({{8, 3, 5}, {7, 2, 6}, {0, 4, 1}});
- 
-    Result result = bfs(initialState);
+    UnpackedState state = {{8, 3, 5}, {7, 2, 6}, {0, 4, 1}};
+    int numberOfTiles = state.size();
+
+    StateManager stateManager(numberOfTiles);
+    BFS bfs(numberOfTiles);
+
+    PackedState initialState = stateManager.pack(state);
+
+    Result result = bfs.execute(initialState);
     result.printResult();
 
     cout << "\n\n";

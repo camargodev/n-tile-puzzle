@@ -8,6 +8,7 @@ class StateManager {
 
 public:
 
+    StateManager(int numberOfTiles);
     int getNumberOfTiles();
     void printPackedState(PackedState state);
     void printUnpackedState(UnpackedState state);

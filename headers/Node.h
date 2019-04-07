@@ -2,7 +2,7 @@
 #define NODE_H
 
 #include "State.h"
-#include <vector>
+#include <deque>
 
 class Node {
 
@@ -18,5 +18,7 @@ private:
     int cost;
 
 };
+
+using OpenSet = deque<Node>;
 
 #endif

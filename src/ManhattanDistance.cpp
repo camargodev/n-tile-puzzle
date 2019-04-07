@@ -18,9 +18,11 @@ int ManhattanDistance :: calculate(PackedState state) {
         uint64_t currentNumber = state & mask;
         currentNumber = currentNumber >> 4*i;
         int intNumber = currentNumber;
-        int expectedPosition = getExpectedPositionForNumber(intNumber);
-        int currentDistance = calculateDistanceBeetwenPositions(expectedPosition, i);
-        distance += currentDistance;
+        if (intNumber > 0) {
+            int expectedPosition = getExpectedPositionForNumber(intNumber);
+            int currentDistance = calculateDistanceBeetwenPositions(expectedPosition, i);
+            distance += currentDistance;
+        }
         mask = mask << 4;
     }
     return distance;
