@@ -9,6 +9,8 @@ public:
   void increaseExpandedNodes();
   void setOptimalSolutionLenght(int lenght);
   void printResult();
+  void setInitialHeuristicValue(int hValue);
+  void increaseTotalHeuristicValue(int hValue);
 
 private:
   int expandedNodes = 0;
@@ -18,6 +20,7 @@ private:
   int initialHeuristicValue;
 
   clock_t startMoment;
+  int totalHValue = 0;
 };
 
 #endif

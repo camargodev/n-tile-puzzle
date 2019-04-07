@@ -14,19 +14,25 @@ using OpenSet = deque<Node>;
 
 StateManager stateManager;
 
-Result executeBFS(PackedState initialState) {    
+Result bfs(PackedState initialState) {    
     Result result;
     OpenSet open;
     ClosedSet closed;
+    ManhattanDistance heuristic(stateManager.getNumberOfTiles());
 
     result.startCountingTime();
+
+    int initialStateHeuristicValue = heuristic.calculate(initialState);
+    result.setInitialHeuristicValue(initialStateHeuristicValue);
+    result.increaseTotalHeuristicValue(initialStateHeuristicValue);
     open.push_back(Node(initialState, 0));
     closed.insert(closed.begin(), initialState);
-    
+
     while (!open.empty()) {
         Node currentNode = open.front();
         open.pop_front();
         result.increaseExpandedNodes();
+        result.increaseTotalHeuristicValue(heuristic.calculate(currentNode.getState()));
         for (auto successorState : stateManager.produceNextStates(currentNode.getState())) {
             Node successorNode = Node(successorState, currentNode.getCost() + 1);
             if (stateManager.isGoalState(successorState)) {
@@ -45,10 +51,10 @@ Result executeBFS(PackedState initialState) {
 }
 
 int main()
-{
-    
+{   
     PackedState initialState = stateManager.pack({{8, 3, 5}, {7, 2, 6}, {0, 4, 1}});
-    Result result = executeBFS(initialState);
+ 
+    Result result = bfs(initialState);
     result.printResult();
 
     cout << "\n\n";
