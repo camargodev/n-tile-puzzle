@@ -8,8 +8,6 @@ class StateManager {
 
 public:
 
-    const short BLANK = 0;
-    const uint64_t ALL_ONES = ~0;
     int getNumberOfTiles();
     void printPackedState(PackedState state);
     void printUnpackedState(UnpackedState state);
@@ -20,7 +18,8 @@ public:
     int getBlankTilePosition(PackedState state);
 
 private:
-
+  
+    const short BLANK = 0;
     const PackedState INITIAL_MASK = 15;
     int numberOfTiles;
     vector<int> getNeighborsPositions(int blankPosition);

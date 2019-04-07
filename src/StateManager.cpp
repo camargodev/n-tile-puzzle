@@ -83,14 +83,14 @@ UnpackedState StateManager :: unpack(PackedState state) {
 
     vector<int> StateManager :: getNeighborsPositions(int blankPosition) {
         vector<int> neighbors;
-        if (blankPosition > numberOfTiles-1)
-            neighbors.insert(neighbors.begin(), blankPosition-numberOfTiles);
         if (blankPosition < numberOfTiles*(numberOfTiles-1))
             neighbors.insert(neighbors.begin(), blankPosition+numberOfTiles);
         if ((blankPosition+1) % numberOfTiles != 0)
             neighbors.insert(neighbors.begin(), blankPosition+1);
         if (blankPosition % numberOfTiles != 0)
             neighbors.insert(neighbors.begin(), blankPosition-1);
+        if (blankPosition > numberOfTiles-1)
+            neighbors.insert(neighbors.begin(), blankPosition-numberOfTiles);
         return neighbors;
     }
 
