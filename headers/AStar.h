@@ -1,19 +1,19 @@
-#ifndef BFS_H
-#define BFS_H
+#ifndef A_STAR_H
+#define A_STAR_H
 
 #include "State.h"
 #include "Result.h"
 
-class BFS {
+class AStar {
 
 public:
 
-    BFS(short numberOfTiles);
+    AStar(short numberOfTiles);
     Result execute(PackedState initialState);
 
 private:
 
-    short numberOfTiles;
+    int numberOfTiles;
 
 };
 

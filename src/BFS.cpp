@@ -7,7 +7,7 @@
 using namespace std;
 using OpenSet = deque<Node>;
 
-BFS :: BFS(int numberOfTiles) {
+BFS :: BFS(short numberOfTiles) {
     this->numberOfTiles = numberOfTiles;
 }
 
