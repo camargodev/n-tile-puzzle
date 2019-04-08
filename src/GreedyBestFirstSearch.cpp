@@ -9,60 +9,69 @@
 
 using namespace std;
 
-int numOfTiles;
-
 class GreedyCompare {
 public:
     bool operator() (Node node1, Node node2) {
-        ManhattanDistance heuristic(numOfTiles);
-        int h1 = heuristic.calculate(node1.getState());
-        int h2 = heuristic.calculate(node2.getState());
+        ManhattanDistance heuristic(node1.numberOfTiles);
+        int h1 = heuristic.calculate(node1.state);
+        int h2 = heuristic.calculate(node2.state);
         if (h1 != h2)
             return h1 > h2;
-        return node1.getIndex() < node2.getIndex();
+        return node1.index < node2.index;
     };
 };
 
 using OpenSet = priority_queue<Node, vector<Node>, GreedyCompare>;
 
+Node buildNode(PackedState state, int cost, int index, short numOfTiles) {
+    Node node;
+    node.state = state;
+    node.numberOfTiles = numOfTiles;
+    node.cost = cost;
+    node.index = index;
+    return node;
+}
+
+Node buildInitialNode(PackedState state, int numOfTiles) {
+    return buildNode(state, 0, 0, numOfTiles);
+}
+
 GreedyBestFirstSearch :: GreedyBestFirstSearch(int numberOfTiles) {
     this->numberOfTiles = numberOfTiles;
-    numOfTiles = this->numberOfTiles;
 }
 
 Result GreedyBestFirstSearch :: execute(PackedState initialState) {
     Result result;
-    priority_queue<Node, vector<Node>, GreedyCompare> open;
+    OpenSet open;
     ClosedSet closed;
     StateManager stateManager(numberOfTiles);
 
     ManhattanDistance heuristic(stateManager.getNumberOfTiles());
-    int order = 0;
+    int index = 0;
 
     result.startCountingTime();
 
     result.setInitialHeuristicValue(heuristic.calculate(initialState));
-    open.push(Node(initialState, 0, order++));
+    open.push(buildInitialNode(initialState, numberOfTiles));
 
     while (!open.empty()) {
         Node currentNode = open.top();
         open.pop();
        
-        if (closed.find(currentNode.getState()) == closed.end()) {
+        if (closed.find(currentNode.state) == closed.end()) {
             
-            closed.insert(closed.begin(), currentNode.getState());
-            if (stateManager.isGoalState(currentNode.getState())) {
-                result.setOptimalSolutionLenght(currentNode.getCost());
+            closed.insert(closed.begin(), currentNode.state);
+            if (stateManager.isGoalState(currentNode.state)) {
+                result.setOptimalSolutionLenght(currentNode.cost);
                 result.stopCountingTime();
                 return result;
             }
 
             result.increaseExpandedNodes();
-            result.increaseTotalHeuristicValue(heuristic.calculate(currentNode.getState()));
+            result.increaseTotalHeuristicValue(heuristic.calculate(currentNode.state));
             
-            for (auto successorState : stateManager.produceNextStates(currentNode.getState())) {
-                Node successorNode = Node(successorState, currentNode.getCost() + 1, order++);
-                open.push(successorNode);
+            for (auto successorState : stateManager.produceNextStates(currentNode.state)) {
+                open.push(buildNode(successorState, currentNode.cost+1, ++index, numberOfTiles));
             } 
         }
         

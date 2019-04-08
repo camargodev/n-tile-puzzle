@@ -27,18 +27,23 @@ Result BFS :: execute(PackedState initialState) {
         return result;
     }
 
-    open.push_back(Node(initialState, 0));
+    Node initialNode;
+    initialNode.cost = 0;
+    initialNode.state = initialState;
+    open.push_back(initialNode);
     closed.insert(closed.begin(), initialState);
 
     while (!open.empty()) {
         Node currentNode = open.front();
         open.pop_front();
         result.increaseExpandedNodes();
-        result.increaseTotalHeuristicValue(heuristic.calculate(currentNode.getState()));
-        for (auto successorState : stateManager.produceNextStates(currentNode.getState())) {
-            Node successorNode = Node(successorState, currentNode.getCost() + 1);
+        result.increaseTotalHeuristicValue(heuristic.calculate(currentNode.state));
+        for (auto successorState : stateManager.produceNextStates(currentNode.state)) {
+            Node successorNode;
+            successorNode.cost = currentNode.cost + 1;
+            successorNode.state = successorState;
             if (stateManager.isGoalState(successorState)) {
-                result.setOptimalSolutionLenght(successorNode.getCost());
+                result.setOptimalSolutionLenght(successorNode.cost);
                 result.stopCountingTime();
                 return result;
             }
