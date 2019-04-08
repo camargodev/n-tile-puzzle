@@ -2,8 +2,10 @@
 #include "../headers/State.h"
 #include "../headers/Node.h"
 #include "../headers/ManhattanDistance.h"
+#include "../headers/StateManager.h"
 
 using namespace std;
+using OpenSet = deque<Node>;
 
 BFS :: BFS(int numberOfTiles) {
     this->numberOfTiles = numberOfTiles;

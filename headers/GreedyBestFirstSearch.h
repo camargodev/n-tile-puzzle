@@ -1,14 +1,14 @@
-#ifndef BFS_H
-#define BFS_H
+#ifndef GREEDY_H
+#define GREEDY_H
 
 #include "State.h"
 #include "Result.h"
 
-class BFS {
+class GreedyBestFirstSearch {
 
 public:
 
-    BFS(int numberOfTiles);
+    GreedyBestFirstSearch(int numberOfTiles);
     Result execute(PackedState initialState);
 
 private:

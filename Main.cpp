@@ -9,6 +9,7 @@
 #include "headers/Node.h"
 #include "headers/Result.h"
 #include "headers/BFS.h"
+#include "headers/GreedyBestFirstSearch.h"
  
 using namespace std;
 
@@ -18,11 +19,11 @@ int main()
     int numberOfTiles = state.size();
 
     StateManager stateManager(numberOfTiles);
-    BFS bfs(numberOfTiles);
+    GreedyBestFirstSearch gbfs(numberOfTiles);
 
     PackedState initialState = stateManager.pack(state);
 
-    Result result = bfs.execute(initialState);
+    Result result = gbfs.execute(initialState);
     result.printResult();
 
     cout << "\n\n";
