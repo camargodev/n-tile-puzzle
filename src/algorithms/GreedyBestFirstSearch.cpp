@@ -1,33 +1,29 @@
-#include "../headers/AStar.h"
-#include "../headers/State.h"
-#include "../headers/Node.h"
-#include "../headers/ManhattanDistance.h"
-#include "../headers/StateManager.h"
+#include "../../headers/algorithms/GreedyBestFirstSearch.h"
+#include "../../headers/State.h"
+#include "../../headers/Node.h"
+#include "../../headers/ManhattanDistance.h"
+#include "../../headers/StateManager.h"
 #include <queue>
 #include <vector>
 #include <iostream>
 
 using namespace std;
 
-class AStarCompare {
+class GreedyCompare {
 public:
     bool operator() (Node node1, Node node2) {
         ManhattanDistance heuristic(node1.numberOfTiles);
-        int f1 = heuristic.calculate(node1.state);
-        int f2 = heuristic.calculate(node2.state);
-        int h1 = f1 + node1.cost;
-        int h2 = f2 + node2.cost;
+        int h1 = heuristic.calculate(node1.state);
+        int h2 = heuristic.calculate(node2.state);
         if (h1 != h2)
             return h1 > h2;
-        if (f1 != f2)
-            return f1 > f2;
         return node1.index < node2.index;
     };
 };
 
-using OpenSet = priority_queue<Node, vector<Node>, AStarCompare>;
+using OpenSet = priority_queue<Node, vector<Node>, GreedyCompare>;
 
-Node buildNode(PackedState state, int cost, int index, short numOfTiles) {
+Node buildGBFSNode(PackedState state, int cost, int index, short numOfTiles) {
     Node node;
     node.state = state;
     node.numberOfTiles = numOfTiles;
@@ -36,15 +32,15 @@ Node buildNode(PackedState state, int cost, int index, short numOfTiles) {
     return node;
 }
 
-Node buildInitialNode(PackedState state, int numOfTiles) {
-    return buildNode(state, 0, 0, numOfTiles);
+Node buildGBFSInitialNode(PackedState state, int numOfTiles) {
+    return buildGBFSNode(state, 0, 0, numOfTiles);
 }
 
-AStar :: AStar(short numberOfTiles) {
+GreedyBestFirstSearch :: GreedyBestFirstSearch(short numberOfTiles) {
     this->numberOfTiles = numberOfTiles;
 }
 
-Result AStar :: execute(PackedState initialState) {
+Result GreedyBestFirstSearch :: execute(PackedState initialState) {
     Result result;
     OpenSet open;
     ClosedSet closed;
@@ -56,7 +52,7 @@ Result AStar :: execute(PackedState initialState) {
     result.startCountingTime();
 
     result.setInitialHeuristicValue(heuristic.calculate(initialState));
-    open.push(buildInitialNode(initialState, numberOfTiles));
+    open.push(buildGBFSInitialNode(initialState, numberOfTiles));
 
     while (!open.empty()) {
         Node currentNode = open.top();
@@ -75,7 +71,7 @@ Result AStar :: execute(PackedState initialState) {
             result.increaseTotalHeuristicValue(heuristic.calculate(currentNode.state));
             
             for (auto successorState : stateManager.produceNextStates(currentNode.state)) {
-                open.push(buildNode(successorState, currentNode.cost+1, ++index, numberOfTiles));
+                open.push(buildGBFSNode(successorState, currentNode.cost+1, ++index, numberOfTiles));
             } 
         }
         

@@ -1,2 +1,2 @@
-all: Main.cpp src/ManhattanDistance.cpp src/StateManager.cpp src/Result.cpp src/BFS.cpp src/GreedyBestFirstSearch.cpp src/AStar.cpp
-	g++ -O3 -o main Main.cpp src/ManhattanDistance.cpp src/StateManager.cpp src/Result.cpp src/BFS.cpp src/GreedyBestFirstSearch.cpp src/AStar.cpp
+all: Main.cpp src/ManhattanDistance.cpp src/StateManager.cpp src/Result.cpp src/algorithms/BFS.cpp src/algorithms/GreedyBestFirstSearch.cpp src/algorithms/AStar.cpp
+	g++ -O3 -o main Main.cpp src/ManhattanDistance.cpp src/StateManager.cpp src/Result.cpp src/algorithms/BFS.cpp src/algorithms/GreedyBestFirstSearch.cpp src/algorithms/AStar.cpp

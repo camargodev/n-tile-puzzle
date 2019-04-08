@@ -1,8 +1,8 @@
 #ifndef BFS_H
 #define BFS_H
 
-#include "State.h"
-#include "Result.h"
+#include "../State.h"
+#include "../Result.h"
 
 class BFS {
 

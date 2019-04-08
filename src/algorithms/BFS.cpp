@@ -1,8 +1,8 @@
-#include "../headers/BFS.h"
-#include "../headers/State.h"
-#include "../headers/Node.h"
-#include "../headers/ManhattanDistance.h"
-#include "../headers/StateManager.h"
+#include "../../headers/algorithms/BFS.h"
+#include "../../headers/State.h"
+#include "../../headers/Node.h"
+#include "../../headers/ManhattanDistance.h"
+#include "../../headers/StateManager.h"
 
 using namespace std;
 using OpenSet = deque<Node>;

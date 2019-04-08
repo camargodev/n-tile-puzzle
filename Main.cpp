@@ -8,9 +8,9 @@
 #include "headers/StateManager.h"
 #include "headers/Node.h"
 #include "headers/Result.h"
-#include "headers/BFS.h"
-#include "headers/GreedyBestFirstSearch.h"
-#include "headers/AStar.h"
+#include "headers/algorithms/BFS.h"
+#include "headers/algorithms/GreedyBestFirstSearch.h"
+#include "headers/algorithms/AStar.h"
  
 using namespace std;
 
