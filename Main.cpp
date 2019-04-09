@@ -16,17 +16,14 @@ using namespace std;
 
 int main()
 {   
- //   UnpackedState state = {{8, 3, 5}, {7, 2, 6}, {0, 4, 1}};
-    UnpackedState state = {{3, 0, 8}, {7, 5, 2}, {1, 6, 4}};
+    UnpackedState state = {{8, 3, 5}, {7, 2, 6}, {0, 4, 1}};
     
-    short numberOfTiles = state.size();
-
-    StateManager stateManager(numberOfTiles);
-    AStar gbfs(numberOfTiles);
+    StateManager stateManager;
+    AStar algotithm;
 
     PackedState initialState = stateManager.pack(state);
 
-    Result result = gbfs.execute(initialState);
+    Result result = algotithm.execute(initialState);
     result.printResult();
 
     cout << "\n\n";

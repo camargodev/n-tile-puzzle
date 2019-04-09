@@ -8,12 +8,7 @@ class AStar {
 
 public:
 
-    AStar(short numberOfTiles);
     Result execute(PackedState initialState);
-
-private:
-
-    int numberOfTiles;
 
 };
 

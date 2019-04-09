@@ -8,23 +8,22 @@ class StateManager {
 
 public:
 
-    StateManager(int numberOfTiles);
-    int getNumberOfTiles();
+    int getNumberOfTiles(PackedState state);
     void printPackedState(PackedState state);
     void printUnpackedState(UnpackedState state);
     bool isGoalState(PackedState state);
     PackedState pack(UnpackedState state);
     UnpackedState unpack(PackedState state);
     std::vector<PackedState> produceNextStates(PackedState state);
-    int getBlankTilePosition(PackedState state);
+    bool is3TileState(PackedState state);
 
 private:
   
     const short BLANK = 0;
     const PackedState INITIAL_MASK = 15;
-    int numberOfTiles;
-    vector<int> getNeighborsPositions(int blankPosition);
+    vector<int> getNeighborsPositions(short numberOfTiles, int blankPosition);
     PackedState swapValuesByPositions(PackedState state, int pos1, int pos2);
+    int getBlankTilePosition(PackedState state);
 
 };
 

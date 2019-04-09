@@ -12,7 +12,9 @@ using namespace std;
 class GreedyCompare {
 public:
     bool operator() (Node node1, Node node2) {
-        ManhattanDistance heuristic(node1.numberOfTiles);
+        StateManager stateManager;
+        short numOfTiles = stateManager.getNumberOfTiles(node1.state);
+        ManhattanDistance heuristic(numOfTiles);
         int h1 = heuristic.calculate(node1.state);
         int h2 = heuristic.calculate(node2.state);
         if (h1 != h2)
@@ -23,36 +25,31 @@ public:
 
 using OpenSet = priority_queue<Node, vector<Node>, GreedyCompare>;
 
-Node buildGBFSNode(PackedState state, int cost, int index, short numOfTiles) {
+Node buildGBFSNode(PackedState state, int cost, int index) {
     Node node;
     node.state = state;
-    node.numberOfTiles = numOfTiles;
     node.cost = cost;
     node.index = index;
     return node;
 }
 
-Node buildGBFSInitialNode(PackedState state, int numOfTiles) {
-    return buildGBFSNode(state, 0, 0, numOfTiles);
-}
-
-GreedyBestFirstSearch :: GreedyBestFirstSearch(short numberOfTiles) {
-    this->numberOfTiles = numberOfTiles;
+Node buildGBFSInitialNode(PackedState state) {
+    return buildGBFSNode(state, 0, 0);
 }
 
 Result GreedyBestFirstSearch :: execute(PackedState initialState) {
     Result result;
     OpenSet open;
     ClosedSet closed;
-    StateManager stateManager(numberOfTiles);
+    StateManager stateManager;
 
-    ManhattanDistance heuristic(stateManager.getNumberOfTiles());
+    ManhattanDistance heuristic(stateManager.getNumberOfTiles(initialState));
     int index = 0;
 
     result.startCountingTime();
 
     result.setInitialHeuristicValue(heuristic.calculate(initialState));
-    open.push(buildGBFSInitialNode(initialState, numberOfTiles));
+    open.push(buildGBFSInitialNode(initialState));
 
     while (!open.empty()) {
         Node currentNode = open.top();
@@ -71,7 +68,7 @@ Result GreedyBestFirstSearch :: execute(PackedState initialState) {
             result.increaseTotalHeuristicValue(heuristic.calculate(currentNode.state));
             
             for (auto successorState : stateManager.produceNextStates(currentNode.state)) {
-                open.push(buildGBFSNode(successorState, currentNode.cost+1, ++index, numberOfTiles));
+                open.push(buildGBFSNode(successorState, currentNode.cost+1, ++index));
             } 
         }
         

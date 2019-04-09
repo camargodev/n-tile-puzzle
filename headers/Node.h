@@ -8,7 +8,6 @@ struct Node {
     PackedState state;
     int cost;
     int index;
-    short numberOfTiles;
 };
 
 #endif

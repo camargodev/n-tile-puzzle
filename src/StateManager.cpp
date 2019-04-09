@@ -8,12 +8,8 @@
  
 using namespace std;
 
-StateManager :: StateManager(int numberOfTiles) {
-    this->numberOfTiles = numberOfTiles;
-}
-
-int StateManager :: getNumberOfTiles() {
-    return this->numberOfTiles;
+int StateManager :: getNumberOfTiles(PackedState state) {
+    return is3TileState(state) ? 3 : 4;
 }
 
 void StateManager :: printPackedState(PackedState pState) {
@@ -21,22 +17,22 @@ void StateManager :: printPackedState(PackedState pState) {
 }
 
 void StateManager :: printUnpackedState(UnpackedState uState) {
-      for(int i = 0; i < numberOfTiles; i++) {
+      for(int i = 0; i < uState.size(); i++) {
         cout << "\n";
-            for(int j = 0; j < numberOfTiles; j++) {
+            for(int j = 0; j < uState[i].size(); j++) {
                 cout << uState[i][j] << " ";
             }
         }     
 }
 
 bool StateManager :: isGoalState(PackedState state) {
-    PackedState goal = numberOfTiles == 3 ? GOAL_3x3 : GOAL_4x4;
+    PackedState goal = is3TileState(state) ? GOAL_3x3 : GOAL_4x4;
     return state == goal;
 }
 
 PackedState StateManager :: pack(UnpackedState state) {
     PackedState packedState = 0;
-    this->numberOfTiles = state.size();
+    int numberOfTiles = state.size();
     for(int i = 0; i < numberOfTiles; i++) {
         for(int j = 0; j < numberOfTiles; j++) {
             packedState = packedState << 4;
@@ -49,6 +45,7 @@ PackedState StateManager :: pack(UnpackedState state) {
 UnpackedState StateManager :: unpack(PackedState state) {
     PackedState mask = INITIAL_MASK;
     UnpackedState unpackedState;
+    short numberOfTiles = getNumberOfTiles(state);
     for (int i = 0; i < numberOfTiles; i++) {
         Line line;
         for (int j = 0; j < numberOfTiles; j++) {
@@ -65,7 +62,8 @@ UnpackedState StateManager :: unpack(PackedState state) {
 vector<PackedState> StateManager :: produceNextStates(PackedState state) {
     vector<PackedState> neighbors;
     int blankPosition = getBlankTilePosition(state);
-    vector<int> neighborsPositions = getNeighborsPositions(blankPosition);
+    short numberOfTiles = getNumberOfTiles(state);
+    vector<int> neighborsPositions = getNeighborsPositions(numberOfTiles, blankPosition);
     for (auto neighboorPosition : neighborsPositions) {
         PackedState neighbor = swapValuesByPositions(state, blankPosition, neighboorPosition);
         neighbors.insert(neighbors.begin(), neighbor);
@@ -75,7 +73,7 @@ vector<PackedState> StateManager :: produceNextStates(PackedState state) {
 
 int StateManager :: getBlankTilePosition(PackedState state) {
     PackedState mask = INITIAL_MASK;
-
+    short numberOfTiles = getNumberOfTiles(state);
     for (int i = 0; i < numberOfTiles*numberOfTiles; i++) {
         uint64_t value = state & mask;
         short shortValue = value >> 4*i;
@@ -85,7 +83,7 @@ int StateManager :: getBlankTilePosition(PackedState state) {
     }
 }
 
-vector<int> StateManager :: getNeighborsPositions(int blankPosition) {
+vector<int> StateManager :: getNeighborsPositions(short numberOfTiles, int blankPosition) {
     vector<int> neighbors;
     if (blankPosition < numberOfTiles*(numberOfTiles-1))
         neighbors.insert(neighbors.begin(), blankPosition+numberOfTiles);
@@ -115,4 +113,13 @@ PackedState StateManager :: swapValuesByPositions(PackedState state, int blankPo
         neighborValue = neighborValue >> 4*(neighborPosition-blankPosition);
 
     return stateWithBlankNeighbor | neighborValue;
+}
+
+bool StateManager :: is3TileState(PackedState state) {
+    uint64_t mask = INITIAL_MASK;
+    uint64_t maskAtPos14 = mask << 4*14;
+    uint64_t maskAtPos13 = mask << 4*13;
+    uint64_t valAtPos13 = state & maskAtPos13;
+    uint64_t valAtPos14 = state & maskAtPos14;
+    return valAtPos13 == 0 && valAtPos14 == 0;
 }

@@ -8,12 +8,7 @@ class GreedyBestFirstSearch {
 
 public:
 
-    GreedyBestFirstSearch(short numberOfTiles);
     Result execute(PackedState initialState);
-
-private:
-
-    short numberOfTiles;
 
 };
 

@@ -7,17 +7,13 @@
 using namespace std;
 using OpenSet = deque<Node>;
 
-BFS :: BFS(short numberOfTiles) {
-    this->numberOfTiles = numberOfTiles;
-}
-
 Result BFS :: execute(PackedState initialState) {
     Result result;
     OpenSet open;
     ClosedSet closed;
-    StateManager stateManager(numberOfTiles);
+    StateManager stateManager;
 
-    ManhattanDistance heuristic(stateManager.getNumberOfTiles());
+    ManhattanDistance heuristic(stateManager.getNumberOfTiles(initialState));
 
     result.startCountingTime();
 

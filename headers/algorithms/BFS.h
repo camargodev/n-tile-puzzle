@@ -8,12 +8,7 @@ class BFS {
 
 public:
 
-    BFS(short numberOfTiles);
     Result execute(PackedState initialState);
-
-private:
-
-    short numberOfTiles;
 
 };
 
