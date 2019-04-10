@@ -9,15 +9,15 @@ Clone and run make.
 ## Running it
 
 Run ```./main``` passing the algorithm you want to execute. Options are:
-    * ```-bfs``` for BFS
-    * ```-gbfs``` for Greedy-BFS
-    * ```-astar``` for A*
-    * ```-idfs``` for Iterative Deepening
-    * ```-idastar``` for IDA*
+* ```-bfs``` for BFS
+* ```-gbfs``` for Greedy-BFS
+* ```-astar``` for A*
+* ```-idfs``` for Iterative Deepening
+* ```-idastar``` for IDA*
 
 Also pass a set of initial entries with at least 1 element. Examples are:
-    * ```0 1 2 3 4 5 6 7 8``` (1 element)
-    * ```1 4 0 5 9 7 2 3 6, 8 7 6 5 4 3 2 1``` (2 elements)
+* ```0 1 2 3 4 5 6 7 8``` (1 element)
+* ```1 4 0 5 9 7 2 3 6, 8 7 6 5 4 3 2 1``` (2 elements)
 
 ## Running it
 
