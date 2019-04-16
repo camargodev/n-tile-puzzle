@@ -1,2 +1,22 @@
-all: Main.cpp src/ManhattanDistance.cpp src/StateManager.cpp src/Result.cpp src/algorithms/BFS.cpp src/algorithms/GreedyBestFirstSearch.cpp src/algorithms/AStar.cpp src/InputReader.cpp
-	g++ -O3 -o main Main.cpp src/ManhattanDistance.cpp src/StateManager.cpp src/Result.cpp src/algorithms/BFS.cpp src/algorithms/GreedyBestFirstSearch.cpp src/algorithms/AStar.cpp src/InputReader.cpp
+all: Main.cpp manhattan state io algorithms 
+	g++ -std=c++11 -O3 -o main Main.cpp ManhattanDistance.o StateManager.o Result.o InputReader.o BFS.o GreedyBestFirstSearch.o AStar.o 
+
+
+manhattan:
+	g++ -std=c++11 -c src/ManhattanDistance.cpp
+
+state:
+	g++ -std=c++11 -c src/StateManager.cpp
+
+io:
+	g++ -std=c++11 -c src/InputReader.cpp
+	g++ -std=c++11 -c src/Result.cpp
+
+algorithms:
+	g++ -std=c++11 -c src/algorithms/AStar.cpp
+	g++ -std=c++11 -c src/algorithms/BFS.cpp
+	g++ -std=c++11 -c src/algorithms/GreedyBestFirstSearch.cpp
+
+clean:
+	rm -f *.o
+	

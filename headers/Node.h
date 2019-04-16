@@ -8,6 +8,7 @@ struct Node {
     PackedState state;
     int cost;
     int index;
+    int heuristicValue;
 };
 
 #endif
