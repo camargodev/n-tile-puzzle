@@ -3,19 +3,19 @@ all: Main.cpp manhattan state io algorithms
 
 
 manhattan:
-	g++ -std=c++11 -c src/ManhattanDistance.cpp
+	g++ -std=c++11 -O3 -c src/ManhattanDistance.cpp
 
 state:
-	g++ -std=c++11 -c src/StateManager.cpp
+	g++ -std=c++11 -O3 -c src/StateManager.cpp
 
 io:
-	g++ -std=c++11 -c src/InputReader.cpp
-	g++ -std=c++11 -c src/Result.cpp
+	g++ -std=c++11 -O3 -c src/InputReader.cpp
+	g++ -std=c++11 -O3 -c src/Result.cpp
 
 algorithms:
-	g++ -std=c++11 -c src/algorithms/AStar.cpp
-	g++ -std=c++11 -c src/algorithms/BFS.cpp
-	g++ -std=c++11 -c src/algorithms/GreedyBestFirstSearch.cpp
+	g++ -std=c++11 -O3 -c src/algorithms/AStar.cpp
+	g++ -std=c++11 -O3 -c src/algorithms/BFS.cpp
+	g++ -std=c++11 -O3 -c src/algorithms/GreedyBestFirstSearch.cpp
 
 clean:
 	rm -f *.o
