@@ -35,6 +35,13 @@ int main(int argc, char** argv)
     Input input = reader.parseInput(argc, argv);
     for (auto unpackedState : input.states) {
         PackedState state = manager.pack(unpackedState);
+        // State s;
+        // s.heuristic = 18;
+        // s.value = state;
+        // for (auto element : manager.getNeighborsPositionsAndHeuristics(s)) {
+        //     cout << "\n\n position = " << element.first;
+        //     cout << "\n heuristic = " << element.second;
+        // }
         Result result = processAlgorithm(input.algorithm, state);
         result.printResult(); 
     }

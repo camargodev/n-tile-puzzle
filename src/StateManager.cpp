@@ -59,14 +59,15 @@ UnpackedState StateManager :: unpack(PackedState state) {
     return unpackedState;
 }
 
-vector<PackedState> StateManager :: produceNextStates(PackedState state) {
-    vector<PackedState> neighbors;
-    int blankPosition = getBlankTilePosition(state);
-    short numberOfTiles = getNumberOfTiles(state);
-    vector<int> neighborsPositions = getNeighborsPositions(numberOfTiles, blankPosition);
-    for (auto neighboorPosition : neighborsPositions) {
-        PackedState neighbor = swapValuesByPositions(state, blankPosition, neighboorPosition);
-        neighbors.insert(neighbors.begin(), neighbor);
+vector<State> StateManager :: produceNextStates(State state) {
+    vector<State> neighbors;
+    int blankPosition = getBlankTilePosition(state.value);
+    short numberOfTiles = getNumberOfTiles(state.value);
+    for (auto neighboorPosition : getNeighborsPositionsAndHeuristics(state)) {
+        State newState;
+        newState.value = swapValuesByPositions(state.value, blankPosition, neighboorPosition.first);
+        newState.heuristic = neighboorPosition.second;
+        neighbors.insert(neighbors.begin(), newState);
     }
     return neighbors;
 }
@@ -83,16 +84,72 @@ int StateManager :: getBlankTilePosition(PackedState state) {
     }
 }
 
-vector<int> StateManager :: getNeighborsPositions(short numberOfTiles, int blankPosition) {
-    vector<int> neighbors;
-    if (blankPosition < numberOfTiles*(numberOfTiles-1))
-        neighbors.insert(neighbors.begin(), blankPosition+numberOfTiles);
-    if ((blankPosition+1) % numberOfTiles != 0)
-        neighbors.insert(neighbors.begin(), blankPosition+1);
-    if (blankPosition % numberOfTiles != 0)
-        neighbors.insert(neighbors.begin(), blankPosition-1);
-    if (blankPosition > numberOfTiles-1)
-        neighbors.insert(neighbors.begin(), blankPosition-numberOfTiles);
+
+int getValueAtPosition(PackedState state, int position) {
+    uint64_t maskToGetNeighborValue = 15;
+    maskToGetNeighborValue = maskToGetNeighborValue << 4*position;
+    uint64_t neighborValue = state & maskToGetNeighborValue;
+    neighborValue = neighborValue >> 4*(position);
+    return (int) neighborValue;
+}
+
+int getExpectedPositionForNumber(int numberOfTiles, int number) {
+    return (numberOfTiles*numberOfTiles) - number - 1;
+}
+
+int calculateDistanceBeetwenPositions(int pos1, int pos2, int numberOfTiles) {
+    int pos1x = (int) floor(pos1/numberOfTiles);
+    int pos1y = pos1 - numberOfTiles*pos1x;
+
+    int pos2x = (int) floor(pos2/numberOfTiles);
+    int pos2y = pos2 - numberOfTiles*pos2x;
+
+    int horizontalDistance = abs(pos1x - pos2x);
+    int verticalDistance = abs(pos1y - pos2y);
+
+    return horizontalDistance + verticalDistance;
+}
+
+vector<pair<int, int>> StateManager :: getNeighborsPositionsAndHeuristics(State state) {
+    vector<pair<int, int>> neighbors;
+    int blankPosition = getBlankTilePosition(state.value);
+    int numberOfTiles = getNumberOfTiles(state.value);
+    if (blankPosition < numberOfTiles*(numberOfTiles-1)) {
+        int newPosition = blankPosition+numberOfTiles;
+        int valAtNewPosition = getValueAtPosition(state.value, newPosition);
+        int expectedPosition = getExpectedPositionForNumber(numberOfTiles, valAtNewPosition);
+        int diffToSubtract = calculateDistanceBeetwenPositions(newPosition, expectedPosition, numberOfTiles);
+        int diffToAdd = calculateDistanceBeetwenPositions(blankPosition, expectedPosition, numberOfTiles);
+        int heuristic = state.heuristic - diffToSubtract + diffToAdd;
+        neighbors.insert(neighbors.begin(), make_pair(newPosition, heuristic));
+    }
+    if ((blankPosition+1) % numberOfTiles != 0) {
+        int newPosition = blankPosition+1;
+        int valAtNewPosition = getValueAtPosition(state.value, newPosition);
+        int expectedPosition = getExpectedPositionForNumber(numberOfTiles, valAtNewPosition);
+        int diffToSubtract = calculateDistanceBeetwenPositions(newPosition, expectedPosition, numberOfTiles);
+        int diffToAdd = calculateDistanceBeetwenPositions(blankPosition, expectedPosition, numberOfTiles);
+        int heuristic = state.heuristic - diffToSubtract + diffToAdd;
+        neighbors.insert(neighbors.begin(), make_pair(newPosition, heuristic));
+    }
+    if (blankPosition % numberOfTiles != 0) {
+        int newPosition = blankPosition-1;
+        int valAtNewPosition = getValueAtPosition(state.value, newPosition);
+        int expectedPosition = getExpectedPositionForNumber(numberOfTiles, valAtNewPosition);
+        int diffToSubtract = calculateDistanceBeetwenPositions(newPosition, expectedPosition, numberOfTiles);
+        int diffToAdd = calculateDistanceBeetwenPositions(blankPosition, expectedPosition, numberOfTiles);
+        int heuristic = state.heuristic - diffToSubtract + diffToAdd;
+        neighbors.insert(neighbors.begin(), make_pair(newPosition, heuristic));
+    }
+    if (blankPosition > numberOfTiles-1) {
+        int newPosition = blankPosition-numberOfTiles;
+        int valAtNewPosition = getValueAtPosition(state.value, newPosition);
+        int expectedPosition = getExpectedPositionForNumber(numberOfTiles, valAtNewPosition);
+        int diffToSubtract = calculateDistanceBeetwenPositions(newPosition, expectedPosition, numberOfTiles);
+        int diffToAdd = calculateDistanceBeetwenPositions(blankPosition, expectedPosition, numberOfTiles);
+        int heuristic = state.heuristic - diffToSubtract + diffToAdd;
+        neighbors.insert(neighbors.begin(), make_pair(newPosition, heuristic));
+    }
     return neighbors;
 }
 
@@ -115,6 +172,7 @@ PackedState StateManager :: swapValuesByPositions(PackedState state, int blankPo
     return stateWithBlankNeighbor | neighborValue;
 }
 
+
 bool StateManager :: is3TileState(PackedState state) {
     uint64_t mask = INITIAL_MASK;
     uint64_t maskAtPos14 = mask << 4*14;
@@ -123,3 +181,4 @@ bool StateManager :: is3TileState(PackedState state) {
     uint64_t valAtPos14 = state & maskAtPos14;
     return valAtPos13 == 0 && valAtPos14 == 0;
 }
+
