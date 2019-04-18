@@ -14,6 +14,7 @@
 #include "headers/algorithms/BFS.h"
 #include "headers/algorithms/GreedyBestFirstSearch.h"
 #include "headers/algorithms/AStar.h"
+#include "headers/algorithms/IDFS.h"
  
 using namespace std;
 
@@ -25,6 +26,8 @@ Result processAlgorithm(int algorithmId, PackedState initialState) {
             return GreedyBestFirstSearch().execute(initialState);
         case InputReader::ASTAR_ID:
             return AStar().execute(initialState);
+        case InputReader::IDFS_ID:
+            return IDFS().execute(initialState);
     }
 }
 

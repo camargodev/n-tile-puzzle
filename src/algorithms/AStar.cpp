@@ -52,6 +52,7 @@ Result AStar :: execute(PackedState initialState) {
 
     Node initialNode = buildInitialNode(initialState, heuristic.calculate(initialState));
     result.setInitialHeuristicValue(initialNode.heuristicValue);
+    result.increaseTotalHeuristicValue(initialNode.heuristicValue);
     open.push(initialNode);
 
     while (!open.empty()) {

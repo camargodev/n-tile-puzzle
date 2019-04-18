@@ -49,6 +49,7 @@ Result GreedyBestFirstSearch :: execute(PackedState initialState) {
     result.startCountingTime();
 
     result.setInitialHeuristicValue(heuristic.calculate(initialState));
+    result.increaseTotalHeuristicValue(heuristic.calculate(initialState));
     open.push(buildGBFSInitialNode(initialState));
 
     while (!open.empty()) {

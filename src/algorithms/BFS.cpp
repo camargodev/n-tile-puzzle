@@ -18,6 +18,7 @@ Result BFS :: execute(PackedState initialState) {
     result.startCountingTime();
 
     result.setInitialHeuristicValue(heuristic.calculate(initialState));
+    result.increaseTotalHeuristicValue(heuristic.calculate(initialState));
     if (stateManager.isGoalState(initialState)) {
         result.stopCountingTime();
         return result;
