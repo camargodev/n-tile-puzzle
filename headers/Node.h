@@ -5,10 +5,9 @@
 #include <deque>
 
 struct Node {
-    PackedState state;
+    State state;
     int cost;
     int index;
-    int heuristicValue;
 };
 
 #endif

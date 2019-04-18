@@ -7,10 +7,6 @@
  
 using namespace std;
 
-ManhattanDistance :: ManhattanDistance(short numberOfTiles) {
-    this->numberOfTiles = numberOfTiles;
-}
-
 int ManhattanDistance :: calculate(PackedState state) {
     int distance = 0;
     uint64_t mask = 15;
@@ -44,4 +40,8 @@ int ManhattanDistance :: calculateDistanceBeetwenPositions(int pos1, int pos2) {
     int verticalDistance = abs(pos1y - pos2y);
 
     return horizontalDistance + verticalDistance;
+}
+
+void ManhattanDistance :: setNumberOfTiles(int numberOfTiles) {
+    this->numberOfTiles = numberOfTiles;
 }
