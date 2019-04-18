@@ -72,6 +72,31 @@ vector<State> StateManager :: produceNextStates(State state) {
     return neighbors;
 }
 
+vector<PackedState> StateManager :: produceNextPackedStates(PackedState state) {
+    vector<PackedState> neighbors;
+    int blankPosition = getBlankTilePosition(state);
+    short numberOfTiles = getNumberOfTiles(state);
+    vector<int> neighborsPositions = getNeighborsPositions(numberOfTiles, blankPosition);
+    for (auto neighboorPosition : neighborsPositions) {
+        PackedState neighbor = swapValuesByPositions(state, blankPosition, neighboorPosition);
+        neighbors.insert(neighbors.begin(), neighbor);
+    }
+    return neighbors;
+}
+
+vector<int> StateManager :: getNeighborsPositions(short numberOfTiles, int blankPosition) {
+    vector<int> neighbors;
+    if (blankPosition < numberOfTiles*(numberOfTiles-1))
+        neighbors.insert(neighbors.begin(), blankPosition+numberOfTiles);
+    if ((blankPosition+1) % numberOfTiles != 0)
+        neighbors.insert(neighbors.begin(), blankPosition+1);
+    if (blankPosition % numberOfTiles != 0)
+        neighbors.insert(neighbors.begin(), blankPosition-1);
+    if (blankPosition > numberOfTiles-1)
+        neighbors.insert(neighbors.begin(), blankPosition-numberOfTiles);
+    return neighbors;
+}
+
 int StateManager :: getBlankTilePosition(PackedState state) {
     PackedState mask = INITIAL_MASK;
     short numberOfTiles = getNumberOfTiles(state);

@@ -20,7 +20,7 @@ Solution IDFS :: depthLimitedSearch(PackedState state, PackedState parent, int d
     
     if(depthLimit > 0){
         result->increaseExpandedNodes();
-        for (auto successorState : stateManager.produceNextStates(state)) {
+        for (auto successorState : stateManager.produceNextPackedStates(state)) {
             if(successorState != parent){
                 solution = depthLimitedSearch(successorState, state, depthLimit-1, result, heuristic);
                 if(solution.isSolution == true){
@@ -38,7 +38,8 @@ Solution IDFS :: depthLimitedSearch(PackedState state, PackedState parent, int d
 Result IDFS :: execute(PackedState initialState){
 
     StateManager stateManager;
-    ManhattanDistance* heuristic = new ManhattanDistance(stateManager.getNumberOfTiles(initialState));
+    ManhattanDistance* heuristic = new ManhattanDistance();
+    heuristic->setNumberOfTiles(stateManager.getNumberOfTiles(initialState));
 
     Result* result = new Result;
     result->startCountingTime();

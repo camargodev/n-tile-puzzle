@@ -17,6 +17,8 @@ public:
     PackedState pack(UnpackedState state);
     UnpackedState unpack(PackedState state);
     std::vector<State> produceNextStates(State state);
+    std::vector<PackedState> produceNextPackedStates(PackedState state);
+    vector<int> getNeighborsPositions(short numberOfTiles, int blankPosition);
     bool is3TileState(PackedState state);
     vector<pair<int, int>> getNeighborsPositionsAndHeuristics(State state);
     int calculateHeuristic(PackedState state);
