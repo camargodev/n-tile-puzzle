@@ -8,46 +8,47 @@ using namespace std;
 using OpenSet = deque<Node>;
 
 Result BFS :: execute(PackedState initialState) {
-    // Result result;
-    // OpenSet open;
-    // ClosedSet closed;
-    // StateManager stateManager;
+    Result result;
+    OpenSet open;
+    ClosedSet closed;
+    StateManager stateManager;
 
-    // ManhattanDistance heuristic(stateManager.getNumberOfTiles(initialState));
+    result.startCountingTime();
 
-    // result.startCountingTime();
+    if (stateManager.isGoalState(initialState)) {
+        result.stopCountingTime();
+        return result;
+    }
 
-    // result.setInitialHeuristicValue(heuristic.calculate(initialState));
-    // if (stateManager.isGoalState(initialState)) {
-    //     result.stopCountingTime();
-    //     return result;
-    // }
+    Node initialNode;
+    initialNode.cost = 0;
+    initialNode.state.value = initialState;
+    initialNode.state.heuristic = stateManager.calculateHeuristic(initialState);
+    
+    open.push_back(initialNode);
+    closed.insert(closed.begin(), initialState);
 
-    // Node initialNode;
-    // initialNode.cost = 0;
-    // initialNode.state = initialState;
-    // open.push_back(initialNode);
-    // closed.insert(closed.begin(), initialState);
+    result.setInitialHeuristicValue(initialNode.state.heuristic);
 
-    // while (!open.empty()) {
-    //     Node currentNode = open.front();
-    //     open.pop_front();
-    //     result.increaseExpandedNodes();
-    //     result.increaseTotalHeuristicValue(heuristic.calculate(currentNode.state));
-    //     for (auto successorState : stateManager.produceNextStates(currentNode.state)) {
-    //         Node successorNode;
-    //         successorNode.cost = currentNode.cost + 1;
-    //         successorNode.state = successorState;
-    //         if (stateManager.isGoalState(successorState)) {
-    //             result.setOptimalSolutionLenght(successorNode.cost);
-    //             result.stopCountingTime();
-    //             return result;
-    //         }
-    //         if (closed.find(successorState) == closed.end()) {
-    //             closed.insert(closed.begin(), successorState);
-    //             open.push_back(successorNode);
-    //         }
-    //     }
-    // }
-    // return result;
+    while (!open.empty()) {
+        Node currentNode = open.front();
+        open.pop_front();
+        result.increaseExpandedNodes();
+        result.increaseTotalHeuristicValue(currentNode.state.heuristic);
+        for (auto successorState : stateManager.produceNextStates(currentNode.state)) {
+            Node successorNode;
+            successorNode.cost = currentNode.cost + 1;
+            successorNode.state = successorState;
+            if (stateManager.isGoalState(successorState.value)) {
+                result.setOptimalSolutionLenght(successorNode.cost);
+                result.stopCountingTime();
+                return result;
+            }
+            if (closed.find(successorState.value) == closed.end()) {
+                closed.insert(closed.begin(), successorState.value);
+                open.push_back(successorNode);
+            }
+        }
+    }
+    return result;
 }
