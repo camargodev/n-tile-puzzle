@@ -38,7 +38,6 @@ int main(int argc, char** argv)
         Result result = processAlgorithm(input.algorithm, state);
         result.printResult(); 
     }
-    cout << "\n\n";
     return 0;
     
 }

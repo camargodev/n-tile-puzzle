@@ -15,4 +15,9 @@ using ClosedSet = unordered_set<PackedState>;
 const PackedState GOAL_3x3 = 305419896;
 const PackedState GOAL_4x4 = 81985529216486895;
 
+struct State {
+    PackedState value;
+    int heuristic;
+};
+
 #endif

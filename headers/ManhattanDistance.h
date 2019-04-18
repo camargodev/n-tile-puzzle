@@ -7,12 +7,12 @@ class ManhattanDistance {
 
 private:
     int numberOfTiles;
-    int getExpectedPositionForNumber(int number);
-    int calculateDistanceBeetwenPositions(int pos1, int pos2);
 
 public:
-    ManhattanDistance(short numberOfTiles);
     int calculate(PackedState state);
+    void setNumberOfTiles(int numberOfTiles);
+    int getExpectedPositionForNumber(int number);
+    int calculateDistanceBeetwenPositions(int pos1, int pos2);
 };
 
 #endif
