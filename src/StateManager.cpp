@@ -17,12 +17,12 @@ void StateManager :: printPackedState(PackedState pState) {
 }
 
 void StateManager :: printUnpackedState(UnpackedState uState) {
-      for(int i = 0; i < uState.size(); i++) {
+    for(int i = 0; i < uState.size(); i++) {
         cout << "\n";
-            for(int j = 0; j < uState[i].size(); j++) {
-                cout << uState[i][j] << " ";
-            }
-        }     
+        for(int j = 0; j < uState[i].size(); j++) {
+            cout << uState[i][j] << " ";
+        }
+    }     
 }
 
 bool StateManager :: isGoalState(PackedState state) {
@@ -93,23 +93,6 @@ int getValueAtPosition(PackedState state, int position) {
     return (int) neighborValue;
 }
 
-int getExpectedPositionForNumber(int numberOfTiles, int number) {
-    return (numberOfTiles*numberOfTiles) - number - 1;
-}
-
-int calculateDistanceBeetwenPositions(int pos1, int pos2, int numberOfTiles) {
-    int pos1x = (int) floor(pos1/numberOfTiles);
-    int pos1y = pos1 - numberOfTiles*pos1x;
-
-    int pos2x = (int) floor(pos2/numberOfTiles);
-    int pos2y = pos2 - numberOfTiles*pos2x;
-
-    int horizontalDistance = abs(pos1x - pos2x);
-    int verticalDistance = abs(pos1y - pos2y);
-
-    return horizontalDistance + verticalDistance;
-}
-
 vector<pair<int, int>> StateManager :: getNeighborsPositionsAndHeuristics(State state) {
     vector<pair<int, int>> neighbors;
     int blankPosition = getBlankTilePosition(state.value);
@@ -117,40 +100,45 @@ vector<pair<int, int>> StateManager :: getNeighborsPositionsAndHeuristics(State 
     if (blankPosition < numberOfTiles*(numberOfTiles-1)) {
         int newPosition = blankPosition+numberOfTiles;
         int valAtNewPosition = getValueAtPosition(state.value, newPosition);
-        int expectedPosition = getExpectedPositionForNumber(numberOfTiles, valAtNewPosition);
-        int diffToSubtract = calculateDistanceBeetwenPositions(newPosition, expectedPosition, numberOfTiles);
-        int diffToAdd = calculateDistanceBeetwenPositions(blankPosition, expectedPosition, numberOfTiles);
+        int expectedPosition = heuristicCalculator.getExpectedPositionForNumber(valAtNewPosition);
+        int diffToSubtract = heuristicCalculator.calculateDistanceBeetwenPositions(newPosition, expectedPosition);
+        int diffToAdd = heuristicCalculator.calculateDistanceBeetwenPositions(blankPosition, expectedPosition);
         int heuristic = state.heuristic - diffToSubtract + diffToAdd;
         neighbors.insert(neighbors.begin(), make_pair(newPosition, heuristic));
     }
     if ((blankPosition+1) % numberOfTiles != 0) {
         int newPosition = blankPosition+1;
         int valAtNewPosition = getValueAtPosition(state.value, newPosition);
-        int expectedPosition = getExpectedPositionForNumber(numberOfTiles, valAtNewPosition);
-        int diffToSubtract = calculateDistanceBeetwenPositions(newPosition, expectedPosition, numberOfTiles);
-        int diffToAdd = calculateDistanceBeetwenPositions(blankPosition, expectedPosition, numberOfTiles);
+        int expectedPosition = heuristicCalculator.getExpectedPositionForNumber(valAtNewPosition);
+        int diffToSubtract = heuristicCalculator.calculateDistanceBeetwenPositions(newPosition, expectedPosition);
+        int diffToAdd = heuristicCalculator.calculateDistanceBeetwenPositions(blankPosition, expectedPosition);
         int heuristic = state.heuristic - diffToSubtract + diffToAdd;
         neighbors.insert(neighbors.begin(), make_pair(newPosition, heuristic));
     }
     if (blankPosition % numberOfTiles != 0) {
         int newPosition = blankPosition-1;
         int valAtNewPosition = getValueAtPosition(state.value, newPosition);
-        int expectedPosition = getExpectedPositionForNumber(numberOfTiles, valAtNewPosition);
-        int diffToSubtract = calculateDistanceBeetwenPositions(newPosition, expectedPosition, numberOfTiles);
-        int diffToAdd = calculateDistanceBeetwenPositions(blankPosition, expectedPosition, numberOfTiles);
+        int expectedPosition = heuristicCalculator.getExpectedPositionForNumber(valAtNewPosition);
+        int diffToSubtract = heuristicCalculator.calculateDistanceBeetwenPositions(newPosition, expectedPosition);
+        int diffToAdd = heuristicCalculator.calculateDistanceBeetwenPositions(blankPosition, expectedPosition);
         int heuristic = state.heuristic - diffToSubtract + diffToAdd;
         neighbors.insert(neighbors.begin(), make_pair(newPosition, heuristic));
     }
     if (blankPosition > numberOfTiles-1) {
         int newPosition = blankPosition-numberOfTiles;
         int valAtNewPosition = getValueAtPosition(state.value, newPosition);
-        int expectedPosition = getExpectedPositionForNumber(numberOfTiles, valAtNewPosition);
-        int diffToSubtract = calculateDistanceBeetwenPositions(newPosition, expectedPosition, numberOfTiles);
-        int diffToAdd = calculateDistanceBeetwenPositions(blankPosition, expectedPosition, numberOfTiles);
+        int expectedPosition = heuristicCalculator.getExpectedPositionForNumber(valAtNewPosition);
+        int diffToSubtract = heuristicCalculator.calculateDistanceBeetwenPositions(newPosition, expectedPosition);
+        int diffToAdd = heuristicCalculator.calculateDistanceBeetwenPositions(blankPosition, expectedPosition);
         int heuristic = state.heuristic - diffToSubtract + diffToAdd;
         neighbors.insert(neighbors.begin(), make_pair(newPosition, heuristic));
     }
     return neighbors;
+}
+
+int StateManager :: calculateHeuristic(PackedState state) {
+    heuristicCalculator.setNumberOfTiles(getNumberOfTiles(state));
+    return heuristicCalculator.calculate(state);
 }
 
 PackedState StateManager :: swapValuesByPositions(PackedState state, int blankPosition, int neighborPosition) {

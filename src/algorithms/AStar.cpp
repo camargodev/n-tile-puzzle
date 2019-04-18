@@ -44,14 +44,13 @@ Result AStar :: execute(PackedState initialState) {
     ClosedSet closed;
     StateManager stateManager;
 
-    ManhattanDistance heuristic(stateManager.getNumberOfTiles(initialState));
     int index = 0;
 
     result.startCountingTime();
 
     State initial;
     initial.value = initialState;
-    initial.heuristic = heuristic.calculate(initialState);
+    initial.heuristic = stateManager.calculateHeuristic(initialState);
     Node initialNode = buildInitialNode(initial);
     result.setInitialHeuristicValue(initialNode.state.heuristic);
     open.push(initialNode);
