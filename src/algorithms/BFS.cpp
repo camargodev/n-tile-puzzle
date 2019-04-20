@@ -29,13 +29,11 @@ Result BFS :: execute(PackedState initialState) {
     closed.insert(closed.begin(), initialState);
 
     result.setInitialHeuristicValue(initialNode.state.heuristic);
-    result.increaseTotalHeuristicValue(initialNode.state.heuristic);
 
     while (!open.empty()) {
         Node currentNode = open.front();
         open.pop_front();
         result.increaseExpandedNodes();
-        result.increaseTotalHeuristicValue(currentNode.state.heuristic);
         for (auto successorState : stateManager.produceNextStates(currentNode.state)) {
             Node successorNode;
             successorNode.cost = currentNode.cost + 1;
