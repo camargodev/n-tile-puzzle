@@ -91,7 +91,7 @@ Result IDAStar :: execute(PackedState initialState){
     
     IDAStar::Solution solution;
 
-    while(fLimit < ULLONG_MAX){
+    while(fLimit != ULLONG_MAX){
         solution = recursiveSearch(initialNode, 0, fLimit);
         if(solution.isSolution == true){
             this->result->setOptimalSolutionLenght(solution.cost);

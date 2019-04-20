@@ -41,3 +41,18 @@ void Result :: printResult() {
     strResult += to_string(this->initialHeuristicValue);
     cout << strResult;
 }
+
+void Result :: writeResult(string fileName) {
+    ofstream outFile;
+    outFile.open(fileName, std::ios_base::app);
+
+    string strResult = "";
+    strResult += to_string(this->expandedNodes) + ",";
+    strResult += to_string(this->optimalSolutionLenght) + ",";
+    strResult += to_string(this->duration) + ",";
+    strResult += to_string(this->totalHValue/max(this->expandedNodes, 1)) + ",";
+    strResult += to_string(this->initialHeuristicValue);
+    outFile << strResult + "\n";
+
+    outFile.close();
+}

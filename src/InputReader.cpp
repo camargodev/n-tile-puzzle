@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <math.h>
 #include "../headers/Input.h"
 
@@ -36,12 +37,20 @@ int InputReader :: getAlgorithmId(const string& algorithm) {
     return INVALID_ID;
 }
 
-const string InputReader :: parseStatesToString(int argc, char** argv) {
-    string stringStates = "";
-    for (int i = ALGORITHM_INDEX+1; i < argc-1; i++) {
-        stringStates = stringStates + argv[i] + " ";
+const string InputReader :: parseStatesToString(int argc, char** argv, bool isTxt) {
+    string stringStates;
+    if(isTxt){
+        ifstream ifs(argv[argc-1]);
+        stringStates.assign( (istreambuf_iterator<char>(ifs) ),
+                (istreambuf_iterator<char>()    ) );
     }
-    stringStates = stringStates + argv[argc-1];
+    else{
+        stringStates = "";
+        for (int i = ALGORITHM_INDEX+1; i < argc-1; i++) {
+            stringStates = stringStates + argv[i] + " ";
+        }
+        stringStates = stringStates + argv[argc-1];
+    }    
     return stringStates;
 } 
 
@@ -63,9 +72,15 @@ const UnpackedState InputReader :: getStateFromString(string str) {
     return state;
 }
 
-vector<UnpackedState> InputReader :: parseStates(int argc, char** argv) {
-    string input = parseStatesToString(argc, argv);
-    vector<string> strStates = split(input, ',');
+vector<UnpackedState> InputReader :: parseStates(int argc, char** argv, bool isTxt) {
+    string input = parseStatesToString(argc, argv, isTxt);
+    vector<string> strStates;
+    if(isTxt){
+        strStates = split(input, '\n');
+    }
+    else{
+        strStates = split(input, ',');
+    }
     vector<UnpackedState> states;
     for (auto state : strStates) 
         states.push_back(getStateFromString(state));
@@ -74,7 +89,16 @@ vector<UnpackedState> InputReader :: parseStates(int argc, char** argv) {
 
 Input InputReader :: parseInput(int argc, char** argv) {
     Input input;
+
+    string teste = "";
+    teste = teste + argv[argc-1];
+    std::size_t found = teste.find(".txt");
+    bool isTxt = false;
+    if(found!=std::string::npos){
+        isTxt = true;
+    }
+
     input.algorithm = getAlgorithmId(argv[ALGORITHM_INDEX]);
-    input.states = parseStates(argc, argv);
+    input.states = parseStates(argc, argv, isTxt);
     return input;
 }

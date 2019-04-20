@@ -14,9 +14,9 @@ class InputReader {
 private:
     const int ALGORITHM_INDEX = 1;
     const vector<string> split(const string& input, const char& delimiter);
-    const string parseStatesToString(int argc, char** argv);
+    const string parseStatesToString(int argc, char** argv, bool isTxt);
     const UnpackedState getStateFromString(string str);
-    vector<UnpackedState> parseStates(int argc, char** argv);
+    vector<UnpackedState> parseStates(int argc, char** argv, bool isTxt);
     int getAlgorithmId(const string& algorithm);
 
 public:
