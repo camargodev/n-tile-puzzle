@@ -1,6 +1,9 @@
 #ifndef RESULT_H
 #define RESULT_H
 
+#include <fstream>
+#include <string>
+
 class Result {
 
 public:
@@ -9,6 +12,7 @@ public:
   void increaseExpandedNodes();
   void setOptimalSolutionLenght(int lenght);
   void printResult();
+  void writeResult(std::string fileName);
   void setInitialHeuristicValue(int hValue);
   void increaseTotalHeuristicValue(int hValue);
   void setTotalHeuristicValue(int hValue);

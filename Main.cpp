@@ -16,6 +16,7 @@
 #include "headers/algorithms/AStar.h"
 #include "headers/algorithms/IDFS.h"
 #include "headers/algorithms/IDAStar.h"
+#include <ctime>
  
 using namespace std;
 
@@ -34,15 +35,33 @@ Result processAlgorithm(int algorithmId, PackedState initialState) {
     }
 }
 
+string currentTime(){
+    time_t     now = time(0);
+    struct tm  tstruct;
+    char       buf[80];
+    tstruct = *localtime(&now);
+    strftime(buf, sizeof(buf), "%d-%m-%Y-%X", &tstruct);
+    string str(buf);
+    for(int i = 0; i < str.length(); i++){
+        if(str.at(i) == ':')
+            str.at(i) = '_';
+    }
+    return str;
+}
+
 int main(int argc, char** argv)
 {   
     StateManager manager;
     InputReader reader;
     Input input = reader.parseInput(argc, argv);
+
+    string fileName = currentTime() + ".csv";
+
     for (auto unpackedState : input.states) {
         PackedState state = manager.pack(unpackedState);
         Result result = processAlgorithm(input.algorithm, state);
         result.printResult(); 
+        result.writeResult(fileName);
     }
     return 0;
     
