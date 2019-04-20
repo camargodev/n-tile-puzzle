@@ -1,5 +1,5 @@
-#ifndef IDFS_H
-#define IDFS_H
+#ifndef IDAStar_H
+#define IDAStar_H
 
 #include "../State.h"
 #include "../Result.h"
@@ -15,13 +15,10 @@ typedef struct Solution{
 class IDFS {
 
 public:
-    IDFS();
-    ~IDFS();
     Result execute(PackedState initialState);
 
 private:
-    Result* result;
-    Solution depthLimitedSearch(PackedState state, PackedState parent, int depthLimit);
+    Solution depthLimitedSearch(PackedState state, PackedState parent, int depthLimit, Result* result, ManhattanDistance* heuristic);
 
 };
 

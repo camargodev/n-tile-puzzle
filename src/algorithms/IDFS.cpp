@@ -8,7 +8,15 @@
 
 using namespace std;
 
-Solution IDFS :: depthLimitedSearch(PackedState state, PackedState parent, int depthLimit, Result* result, ManhattanDistance* heuristic){
+IDFS :: IDFS(){
+    this->result = new Result;
+}
+
+IDFS :: ~IDFS(){
+    delete this->result;
+}
+
+Solution IDFS :: depthLimitedSearch(PackedState state, PackedState parent, int depthLimit){
     Solution solution;
     StateManager stateManager;
 
@@ -19,10 +27,10 @@ Solution IDFS :: depthLimitedSearch(PackedState state, PackedState parent, int d
     }
     
     if(depthLimit > 0){
-        result->increaseExpandedNodes();
+        this->result->increaseExpandedNodes();
         for (auto successorState : stateManager.produceNextPackedStates(state)) {
             if(successorState != parent){
-                solution = depthLimitedSearch(successorState, state, depthLimit-1, result, heuristic);
+                solution = depthLimitedSearch(successorState, state, depthLimit-1);
                 if(solution.isSolution == true){
                     solution.cost++;
                     return solution;
@@ -41,19 +49,20 @@ Result IDFS :: execute(PackedState initialState){
     ManhattanDistance* heuristic = new ManhattanDistance();
     heuristic->setNumberOfTiles(stateManager.getNumberOfTiles(initialState));
 
-    Result* result = new Result;
-    result->startCountingTime();
-    result->setInitialHeuristicValue(heuristic->calculate(initialState));
+    this->result->startCountingTime();
+    this->result->setInitialHeuristicValue(heuristic->calculate(initialState));
+
+    delete heuristic;
     
     int depthLimit = 0;
     Solution solution;
 
     while(true){
-        solution = depthLimitedSearch(initialState, -1, depthLimit, result, heuristic);
+        solution = depthLimitedSearch(initialState, -1, depthLimit);
         if (solution.isSolution == true) {
             result->setOptimalSolutionLenght(solution.cost);
             result->stopCountingTime();
-            return *result;
+            return *(this->result);
         }
         depthLimit++;
     }
