@@ -3,22 +3,26 @@
 
 #include "../State.h"
 #include "../Result.h"
-#include "../ManhattanDistance.h"
+#include "../Node.h"
 
-
-
-typedef struct Solution{
-    bool isSolution;
-    unsigned long int cost;
-} Solution;
-
-class IDFS {
+class IDAStar {
 
 public:
+    IDAStar();
+    ~IDAStar();
     Result execute(PackedState initialState);
 
 private:
-    Solution depthLimitedSearch(PackedState state, PackedState parent, int depthLimit, Result* result, ManhattanDistance* heuristic);
+    Result* result;
+    int f(Node node);
+    Node buildNode(State state, int cost);
+    Node buildInitialNode(State state);
+    typedef struct Solution{
+        bool isSolution;
+        unsigned long long int cost;
+        unsigned long long int limit;
+    } Solution;
+    Solution recursiveSearch(Node state, PackedState parent, int fLimit);
 
 };
 

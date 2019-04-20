@@ -5,13 +5,6 @@
 #include "../Result.h"
 #include "../ManhattanDistance.h"
 
-
-
-typedef struct Solution{
-    bool isSolution;
-    unsigned long int cost;
-} Solution;
-
 class IDFS {
 
 public:
@@ -21,8 +14,12 @@ public:
 
 private:
     Result* result;
+    typedef struct Solution{
+        bool isSolution;
+        unsigned long long int cost;
+    } Solution;
     Solution depthLimitedSearch(PackedState state, PackedState parent, int depthLimit);
-
+    
 };
 
 #endif

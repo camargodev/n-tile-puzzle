@@ -16,8 +16,8 @@ IDFS :: ~IDFS(){
     delete this->result;
 }
 
-Solution IDFS :: depthLimitedSearch(PackedState state, PackedState parent, int depthLimit){
-    Solution solution;
+IDFS::Solution IDFS :: depthLimitedSearch(PackedState state, PackedState parent, int depthLimit){
+    IDFS::Solution solution;
     StateManager stateManager;
 
     if (stateManager.isGoalState(state)){
@@ -46,22 +46,18 @@ Solution IDFS :: depthLimitedSearch(PackedState state, PackedState parent, int d
 Result IDFS :: execute(PackedState initialState){
 
     StateManager stateManager;
-    ManhattanDistance* heuristic = new ManhattanDistance();
-    heuristic->setNumberOfTiles(stateManager.getNumberOfTiles(initialState));
 
     this->result->startCountingTime();
-    this->result->setInitialHeuristicValue(heuristic->calculate(initialState));
-
-    delete heuristic;
+    this->result->setInitialHeuristicValue(stateManager.calculateHeuristic(initialState));
     
     int depthLimit = 0;
-    Solution solution;
+    IDFS::Solution solution;
 
     while(true){
-        solution = depthLimitedSearch(initialState, -1, depthLimit);
+        solution = depthLimitedSearch(initialState, 0, depthLimit);
         if (solution.isSolution == true) {
-            result->setOptimalSolutionLenght(solution.cost);
-            result->stopCountingTime();
+            this->result->setOptimalSolutionLenght(solution.cost);
+            this->result->stopCountingTime();
             return *(this->result);
         }
         depthLimit++;

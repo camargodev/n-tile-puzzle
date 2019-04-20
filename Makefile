@@ -1,5 +1,5 @@
 all: Main.cpp manhattan state io algorithms 
-	g++ -std=c++11 -O3 -o main Main.cpp ManhattanDistance.o StateManager.o Result.o InputReader.o BFS.o GreedyBestFirstSearch.o AStar.o IDFS.o
+	g++ -std=c++11 -O3 -o main Main.cpp ManhattanDistance.o StateManager.o Result.o InputReader.o BFS.o GreedyBestFirstSearch.o AStar.o IDFS.o IDAStar.o
 
 
 manhattan:
@@ -17,6 +17,7 @@ algorithms:
 	g++ -std=c++11 -O3 -c src/algorithms/BFS.cpp
 	g++ -std=c++11 -O3 -c src/algorithms/GreedyBestFirstSearch.cpp
 	g++ -std=c++11 -O3 -c src/algorithms/IDFS.cpp
+	g++ -std=c++11 -O3 -c src/algorithms/IDAStar.cpp
 
 clean:
 	rm -f *.o
