@@ -73,6 +73,8 @@ Result AStar :: execute(PackedState initialState) {
             result.increaseTotalHeuristicValue(currentNode.state.heuristic);
             
             for (auto successorState : stateManager.produceNextStates(currentNode.state)) {
+                //result.increaseTotalHeuristicValue(successorState.heuristic);
+                //result.increaseGeneratedNodes();
                 open.push(buildNode(successorState, currentNode.cost+1, ++index));
             } 
         }

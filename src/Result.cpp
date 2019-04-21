@@ -7,6 +7,10 @@ void Result :: increaseExpandedNodes() {
     this->expandedNodes++;
 }
 
+void Result :: increaseGeneratedNodes() {
+    this->generatedNodes++;
+}
+
 void Result :: stopCountingTime() {
     this->duration = float(clock() - this->startMoment)/CLOCKS_PER_SEC;
 }
@@ -37,7 +41,7 @@ void Result :: printResult() {
     strResult += to_string(this->expandedNodes) + ",";
     strResult += to_string(this->optimalSolutionLenght) + ",";
     strResult += to_string(this->duration) + ",";
-    strResult += to_string(this->totalHValue/max(this->expandedNodes, 1)) + ",";
+    strResult += to_string(this->totalHValue/max(this->generatedNodes, 1)) + ",";
     strResult += to_string(this->initialHeuristicValue);
     cout << strResult;
 }
@@ -50,7 +54,7 @@ void Result :: writeResult(string fileName) {
     strResult += to_string(this->expandedNodes) + ",";
     strResult += to_string(this->optimalSolutionLenght) + ",";
     strResult += to_string(this->duration) + ",";
-    strResult += to_string(this->totalHValue/max(this->expandedNodes, 1)) + ",";
+    strResult += to_string(this->totalHValue/max(this->generatedNodes, 1)) + ",";
     strResult += to_string(this->initialHeuristicValue);
     outFile << strResult + "\n";
 

@@ -10,6 +10,7 @@ public:
   void startCountingTime();
   void stopCountingTime();
   void increaseExpandedNodes();
+  void increaseGeneratedNodes();
   void setOptimalSolutionLenght(int lenght);
   void printResult();
   void writeResult(std::string fileName);
@@ -19,6 +20,7 @@ public:
 
 private:
   int expandedNodes = 0;
+  int generatedNodes = 0;
   int optimalSolutionLenght;
   float duration;
   float averageHeuristicValue;
