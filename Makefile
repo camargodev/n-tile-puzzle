@@ -22,4 +22,4 @@ algorithms:
 clean:
 	rm -f *.o
 	rm -f main
-	
+	rm -f *.csv

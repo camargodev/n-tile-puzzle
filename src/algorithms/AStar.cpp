@@ -9,8 +9,7 @@
 
 using namespace std;
 
-class AStarCompare {
-public:
+struct AStarCompare {
     bool operator() (Node node1, Node node2) {
         int f1 = node1.state.heuristic;
         int f2 = node2.state.heuristic;
