@@ -40,7 +40,7 @@ string currentTime(){
     struct tm  tstruct;
     char       buf[80];
     tstruct = *localtime(&now);
-    strftime(buf, sizeof(buf), "%d-%m-%Y-%X", &tstruct);
+    strftime(buf, sizeof(buf), "%d-%m-%Y-%H", &tstruct);
     string str(buf);
     for(int i = 0; i < str.length(); i++){
         if(str.at(i) == ':')
@@ -55,7 +55,7 @@ int main(int argc, char** argv)
     InputReader reader;
     Input input = reader.parseInput(argc, argv);
 
-    string fileName = currentTime() + ".csv";
+    string fileName = currentTime() + argv[1] + ".csv";
 
     for (auto unpackedState : input.states) {
         PackedState state = manager.pack(unpackedState);
