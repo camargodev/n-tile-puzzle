@@ -54,11 +54,12 @@ IDAStar::Solution IDAStar :: recursiveSearch(Node currentNode, PackedState paren
     unsigned long long int nextLimit = ULLONG_MAX;
 
     this->result->increaseExpandedNodes();
-    this->result->increaseTotalHeuristicValue(currentNode.state.heuristic);
+
     for (auto successorState : stateManager.produceNextPackedStates(currentNode.state.value)) {
         if(successorState != parent){
             State sucState;
             sucState.heuristic = stateManager.calculateHeuristic(successorState);
+            this->result->increaseTotalHeuristicValue(sucState.heuristic);
             if(sucState.heuristic < ULLONG_MAX){
                 sucState.value = successorState;
                 Node sucNode = IDAStar::buildNode(sucState, currentNode.cost+1);

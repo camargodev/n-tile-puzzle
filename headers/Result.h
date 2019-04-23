@@ -21,6 +21,7 @@ public:
 private:
   int expandedNodes = 0;
   int generatedNodes = 0;
+  int counter = 0;
   int optimalSolutionLenght;
   float duration;
   float averageHeuristicValue;

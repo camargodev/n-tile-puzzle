@@ -66,9 +66,9 @@ Result GreedyBestFirstSearch :: execute(PackedState initialState) {
             }
 
             result.increaseExpandedNodes();
-            result.increaseTotalHeuristicValue(currentNode.state.heuristic);
             
             for (auto successorState : stateManager.produceNextStates(currentNode.state)) {
+                result.increaseTotalHeuristicValue(successorState.heuristic);
                 open.push(buildGBFSNode(successorState, currentNode.cost+1, ++index));
             } 
         }
