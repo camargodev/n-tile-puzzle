@@ -24,6 +24,7 @@ Result BFS :: execute(PackedState initialState) {
     initialNode.cost = 0;
     initialNode.state.value = initialState;
     initialNode.state.heuristic = stateManager.calculateHeuristic(initialState);
+    initialNode.state.parentBlankPos = -1;
     
     open.push_back(initialNode);
     closed.insert(closed.begin(), initialState);

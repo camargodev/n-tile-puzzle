@@ -88,6 +88,7 @@ Result IDAStar :: execute(PackedState initialState){
     State initial;
     initial.value = initialState;
     initial.heuristic = fLimit;
+    initial.parentBlankPos = -1;
     Node initialNode = IDAStar::buildInitialNode(initial);
     
     IDAStar::Solution solution;
