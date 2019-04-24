@@ -22,13 +22,13 @@ private:
   int expandedNodes = 0;
   int generatedNodes = 0;
   int counter = 0;
-  int optimalSolutionLenght;
+  short optimalSolutionLenght;
   float duration;
-  float averageHeuristicValue;
-  int initialHeuristicValue;
+  double averageHeuristicValue;
+  short initialHeuristicValue;
 
   clock_t startMoment;
-  float totalHValue = 0;
+  double totalHValue = 0;
 };
 
 #endif

@@ -39,12 +39,15 @@ void Result :: setTotalHeuristicValue(int hValue){
 
 void Result :: printResult() {
     string strResult = "\n";
+    this->averageHeuristicValue = this->totalHValue/max(this->counter, 1);
     strResult += to_string(this->expandedNodes) + ",";
     strResult += to_string(this->optimalSolutionLenght) + ",";
     strResult += to_string(this->duration) + ",";
-    strResult += to_string(this->totalHValue/max(this->counter, 1)) + ",";
+    strResult += to_string(this->averageHeuristicValue) + ",";
     strResult += to_string(this->initialHeuristicValue);
     cout << strResult;
+    // cout << "\nXXX: " << averageHeuristicValue;
+    // cout << "\nCounter: " << counter;
 }
 
 void Result :: writeResult(string fileName) {

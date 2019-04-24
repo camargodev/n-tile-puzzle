@@ -30,6 +30,7 @@ private:
     ManhattanDistance heuristicCalculator;
     PackedState swapValuesByPositions(PackedState state, int pos1, int pos2);
     int getBlankTilePosition(PackedState state);
+    int calculateNeighborHeuristic(State state, int blankPosition, int newPosition);
 
 };
 
