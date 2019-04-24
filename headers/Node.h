@@ -6,7 +6,7 @@
 
 struct Node {
     State state;
-    int cost;
+    byte cost;
     int index;
 };
 

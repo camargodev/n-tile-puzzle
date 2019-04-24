@@ -67,6 +67,7 @@ vector<State> StateManager :: produceNextStates(State state) {
         State newState;
         newState.value = swapValuesByPositions(state.value, blankPosition, neighboorPosition.first);
         newState.heuristic = neighboorPosition.second;
+        newState.parentBlankPos = blankPosition;
         neighbors.insert(neighbors.begin(), newState);
     }
     return neighbors;
@@ -118,45 +119,45 @@ int getValueAtPosition(PackedState state, int position) {
     return (int) neighborValue;
 }
 
+int StateManager :: calculateNeighborHeuristic(State state, int blankPosition, int newPosition) {
+    int valAtNewPosition = getValueAtPosition(state.value, newPosition);
+    int expectedPosition = heuristicCalculator.getExpectedPositionForNumber(valAtNewPosition);
+    int diffToSubtract = heuristicCalculator.calculateDistanceBeetwenPositions(newPosition, expectedPosition);
+    int diffToAdd = heuristicCalculator.calculateDistanceBeetwenPositions(blankPosition, expectedPosition);
+    return state.heuristic - diffToSubtract + diffToAdd;
+}
+
 vector<pair<int, int>> StateManager :: getNeighborsPositionsAndHeuristics(State state) {
     vector<pair<int, int>> neighbors;
     int blankPosition = getBlankTilePosition(state.value);
     int numberOfTiles = getNumberOfTiles(state.value);
     if (blankPosition < numberOfTiles*(numberOfTiles-1)) {
         int newPosition = blankPosition+numberOfTiles;
-        int valAtNewPosition = getValueAtPosition(state.value, newPosition);
-        int expectedPosition = heuristicCalculator.getExpectedPositionForNumber(valAtNewPosition);
-        int diffToSubtract = heuristicCalculator.calculateDistanceBeetwenPositions(newPosition, expectedPosition);
-        int diffToAdd = heuristicCalculator.calculateDistanceBeetwenPositions(blankPosition, expectedPosition);
-        int heuristic = state.heuristic - diffToSubtract + diffToAdd;
-        neighbors.insert(neighbors.begin(), make_pair(newPosition, heuristic));
+        if (newPosition != state.parentBlankPos) {
+            int heuristic = calculateNeighborHeuristic(state, blankPosition, newPosition);
+            neighbors.insert(neighbors.begin(), make_pair(newPosition, heuristic));
+        }
     }
     if ((blankPosition+1) % numberOfTiles != 0) {
         int newPosition = blankPosition+1;
-        int valAtNewPosition = getValueAtPosition(state.value, newPosition);
-        int expectedPosition = heuristicCalculator.getExpectedPositionForNumber(valAtNewPosition);
-        int diffToSubtract = heuristicCalculator.calculateDistanceBeetwenPositions(newPosition, expectedPosition);
-        int diffToAdd = heuristicCalculator.calculateDistanceBeetwenPositions(blankPosition, expectedPosition);
-        int heuristic = state.heuristic - diffToSubtract + diffToAdd;
-        neighbors.insert(neighbors.begin(), make_pair(newPosition, heuristic));
+        if (newPosition != state.parentBlankPos) {
+            int heuristic = calculateNeighborHeuristic(state, blankPosition, newPosition);
+            neighbors.insert(neighbors.begin(), make_pair(newPosition, heuristic));
+        }
     }
     if (blankPosition % numberOfTiles != 0) {
         int newPosition = blankPosition-1;
-        int valAtNewPosition = getValueAtPosition(state.value, newPosition);
-        int expectedPosition = heuristicCalculator.getExpectedPositionForNumber(valAtNewPosition);
-        int diffToSubtract = heuristicCalculator.calculateDistanceBeetwenPositions(newPosition, expectedPosition);
-        int diffToAdd = heuristicCalculator.calculateDistanceBeetwenPositions(blankPosition, expectedPosition);
-        int heuristic = state.heuristic - diffToSubtract + diffToAdd;
-        neighbors.insert(neighbors.begin(), make_pair(newPosition, heuristic));
+        if (newPosition != state.parentBlankPos) {
+            int heuristic = calculateNeighborHeuristic(state, blankPosition, newPosition);
+            neighbors.insert(neighbors.begin(), make_pair(newPosition, heuristic));
+        }
     }
     if (blankPosition > numberOfTiles-1) {
         int newPosition = blankPosition-numberOfTiles;
-        int valAtNewPosition = getValueAtPosition(state.value, newPosition);
-        int expectedPosition = heuristicCalculator.getExpectedPositionForNumber(valAtNewPosition);
-        int diffToSubtract = heuristicCalculator.calculateDistanceBeetwenPositions(newPosition, expectedPosition);
-        int diffToAdd = heuristicCalculator.calculateDistanceBeetwenPositions(blankPosition, expectedPosition);
-        int heuristic = state.heuristic - diffToSubtract + diffToAdd;
-        neighbors.insert(neighbors.begin(), make_pair(newPosition, heuristic));
+        if (newPosition != state.parentBlankPos) {
+            int heuristic = calculateNeighborHeuristic(state, blankPosition, newPosition);
+            neighbors.insert(neighbors.begin(), make_pair(newPosition, heuristic));
+        }
     }
     return neighbors;
 }
